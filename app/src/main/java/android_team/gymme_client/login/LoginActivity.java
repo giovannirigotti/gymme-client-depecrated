@@ -18,12 +18,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -35,15 +31,11 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
 import android_team.gymme_client.R;
 import android_team.gymme_client.customer.CustomerHomeActivity;
 import android_team.gymme_client.local_database.local_dbmanager.DBManagerStatus;
 import android_team.gymme_client.local_database.local_dbmanager.DBManagerUser;
-import android_team.gymme_client.server_sync.HttpGetRequest;
 import android_team.gymme_client.signup.SignupActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;

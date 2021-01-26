@@ -1,6 +1,5 @@
 package android_team.gymme_client.signup;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -300,11 +299,11 @@ public class SignupActivity2  extends AppCompatActivity {
     }
 
     private void signupSuccess(){
-/*
+        /*
         Intent intent = new Intent(getApplicationContext(), SignupSuccessfulActivity.class);
         startActivity(intent);
         finish();
-*/
+        */
     }
 
     private void signUp(String name, String lastname, String email, String birthdate, String password, int type) {

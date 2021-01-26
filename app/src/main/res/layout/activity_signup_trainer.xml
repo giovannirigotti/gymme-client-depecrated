@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".trainer.SignupTrainer">
+
+    <Button
+        android:id="@+id/btn_end_registrazione"
+        android:layout_width="156dp"
+        android:layout_height="53dp"
+        android:text="REGISTRATI"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.7" />
+
+    <EditText
+        android:id="@+id/et_qualificazione"
+        android:layout_width="293dp"
+        android:layout_height="117dp"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:lines="6"
+        android:maxLines="10"
+        android:minLines="6"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.289" />
+
+    <TextView
+        android:id="@+id/label_qualifications"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Inserisci la tua qualifica"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.225"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.206" />
+
+    <EditText
+        android:id="@+id/ed_codice_fiscale"
+        android:layout_width="294dp"
+        android:layout_height="46dp"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:lines="6"
+        android:maxLines="10"
+        android:minLines="6"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.54" />
+
+    <TextView
+        android:id="@+id/label_codice_fiscale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Inserisci il codice fiscale"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.23"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.474" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
