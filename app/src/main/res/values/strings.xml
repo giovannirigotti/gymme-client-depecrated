@@ -22,5 +22,6 @@
     <string name="gym_trainer_description">Se sei un professionista dell\'esercizio fisico.</string>
     <string name="nutritionist_description">Se sei un professionista dell\'alimentazione.</string>
     <string name="gym_owner_description">Se possiedi una palestra.</string>
+    <string name="height">Inserisci la tua altezza</string>
 </resources>
 
