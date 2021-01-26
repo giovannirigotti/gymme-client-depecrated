@@ -1,35 +1,77 @@
 package android_team.gymme_client;
 
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Bundle;
+import android.util.Log;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android_team.gymme_client.customer.CustomerHomeActivity;
+import android_team.gymme_client.local_database.local_dbmanager.DBManagerStatus;
+import android_team.gymme_client.local_database.local_dbmanager.DBManagerUser;
+import android_team.gymme_client.login.LoginActivity;
+import android_team.gymme_client.support.NoNetworkActivity;
 
-import android_team.gymme_client.server_sync.HttpGetRequest;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView tvServerResponse;
+    private DBManagerStatus dbManagerStatus = null;
+    private DBManagerUser dbManagerUser = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        tvServerResponse = findViewById(R.id.label_test);
-        Button contactServerButton = findViewById(R.id.btn_test_node);
+        dbManagerStatus = new DBManagerStatus(this);
+        dbManagerStatus.open();
+        dbManagerUser = new DBManagerUser(this);
+        dbManagerUser.open();
+        Cursor statusCursor = dbManagerStatus.fetch();
+        int status = statusCursor.getInt(statusCursor.getColumnIndex("status"));
+        // LOGGATO = 1;
+        // NON-LOGGATO = 0;
+        Log.e("Status", Integer.toString(status));
 
-        contactServerButton.setOnClickListener(onButtonClickListener);
+        if (status == 1) {
+            Cursor userCursor = dbManagerUser.fetch();
+            int type = userCursor.getInt(userCursor.getColumnIndex("type"));
+            Log.e("Type", Integer.toString(type));
+            dbManagerUser.close();
+            dbManagerStatus.close();
+            if (type == 0) { //Se è un utente "normale".
+                Intent i = new Intent(getApplicationContext(), CustomerHomeActivity.class);
+                startActivity(i);
+                finish();
+            } else if (type == 1) {
+                //Se è un trainer.
+            } else if (type == 2) {
+                //Se è un nutrizionista.
+            } else if (type == 3) {
+                //Se è un proprietario.
+            }
+
+        } else {
+
+            ConnectivityManager connectivityManager
+                    = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+
+            if (activeNetworkInfo == null) {
+                Intent i = new Intent(getApplicationContext(), NoNetworkActivity.class);
+                startActivity(i);
+                finish();
+            } else {
+                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(i);
+                finish();
+            }
+        }
     }
 
-    View.OnClickListener onButtonClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            HttpGetRequest request = new HttpGetRequest();
-            request.execute();
-            tvServerResponse.setText(HttpGetRequest.http_response);
-        }
-    };
+
 }
+
