@@ -13,8 +13,16 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -23,7 +31,7 @@ import android_team.gymme_client.support.Fx;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SignupActivity2  extends AppCompatActivity {
+public class SignupActivity2 extends AppCompatActivity {
 
     @BindView(R.id.back_to_signup1_button)
     ImageButton _back_to_signup1_button;
@@ -298,8 +306,13 @@ public class SignupActivity2  extends AppCompatActivity {
 
     }
 
+<<<<<<< HEAD
     private void signupSuccess(){
         /*
+=======
+    private void signupSuccess() {
+/*
+>>>>>>> 0248439dae933a14f990a33664ab519a3a1c49eb
         Intent intent = new Intent(getApplicationContext(), SignupSuccessfulActivity.class);
         startActivity(intent);
         finish();
@@ -309,12 +322,12 @@ public class SignupActivity2  extends AppCompatActivity {
     private void signUp(String name, String lastname, String email, String birthdate, String password, int type) {
         disableButtons();
         startSpinner(type);
-        new Connection().execute(name, lastname, email, birthdate, password, Integer.toString(type));
+        new RegisterBaseUserConnection().execute(name, lastname, email, birthdate, password, Integer.toString(type));
 
     }
 
 
-    private class Connection extends AsyncTask<String, String, Integer> {
+    private class RegisterBaseUserConnection extends AsyncTask<String, String, Integer> {
 
         String toastMessage = null;
 
@@ -329,14 +342,43 @@ public class SignupActivity2  extends AppCompatActivity {
             JsonObject user = null;
             int responseCode = 500;
             try {
-                url = new URL("http://10.0.2.2:9869/GymMeMoreServer_war/user/signup?name=" + params[0] + "&lastName=" + params[1] + "&birthDate=" + params[3] + "&email=" + params[2] + "&password=" + params[4]+ "&type=" + params[5]);
+                url = new URL("http://10.0.2.2:4000/register/user");
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("POST");
                 urlConnection.setConnectTimeout(5000);
+                urlConnection.setRequestProperty("Content-Type", "application/json");
+
+                JsonObject paramsJson = new JsonObject();
+
+                paramsJson.addProperty("name", params[0]);
+                paramsJson.addProperty("lastname", params[1]);
+                paramsJson.addProperty("email", params[2]);
+                paramsJson.addProperty("birthdate", params[3]);
+                paramsJson.addProperty("password", params[4]);
+                paramsJson.addProperty("user_type", params[5]);
+
+
+                Log.e("json", paramsJson.toString());
+
+                urlConnection.setDoOutput(true);
+
+                OutputStream os = urlConnection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, "UTF-8"));
+                writer.write(paramsJson.toString());
+                writer.flush();
+                writer.close();
+                os.close();
+
+                urlConnection.connect();
                 responseCode = urlConnection.getResponseCode();
-                Log.e("response code", Integer.toString(responseCode));
+                Log.e("response code regi", Integer.toString(responseCode));
 
                 if (responseCode == HttpURLConnection.HTTP_OK) {
+
+                    new CheckUserDataConnection().execute(email);
+
+
                 } else if (responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
                     Log.e("Server response", "Error during signup!");
                     toastMessage = "Errore nella registrazione di un nuovo utente!";
@@ -357,20 +399,125 @@ public class SignupActivity2  extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Integer responseCode) {
-            if (responseCode == 200) {
-                signupSuccess();
-            } else if (responseCode == 409) {
-                stopSpinner(toastMessage);
+           stopSpinner(toastMessage);
 
-            } else if (responseCode == 500) {
-                stopSpinner(toastMessage);
+        }
+    }
 
-            } else if (responseCode == 69)
-                stopSpinner(toastMessage);
+
+    private class CheckUserDataConnection extends AsyncTask<String, String, JsonObject> {
+
+        String toastMessage = null;
+
+        @Override
+        protected void onPreExecute() {
 
         }
 
+        @Override
+        protected JsonObject doInBackground(String... params) {
+            URL url;
+            HttpURLConnection urlConnection = null;
+            JsonObject user = null;
+
+            try {
+                url = new URL("http://10.0.2.2:4000/get_user_data/" + params[0]);
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setConnectTimeout(5000);
+                urlConnection.connect();
+                int responseCode = urlConnection.getResponseCode();
+                urlConnection.disconnect();
+
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+
+
+                    String responseString = readStream(urlConnection.getInputStream());
+                    user = JsonParser.parseString(responseString).getAsJsonObject();
+
+                    int user_type = user.get("user_type").getAsInt();
+
+                    ////aggiungere i reindirizzamenti alle pagine di signup dati specifici in base agli altir tipi di utente
+
+                    if (user_type == 0) {
+                        Intent intent = new Intent(getApplicationContext(), CustomerSignupActivity.class);
+                        intent.putExtra("name", name);
+                        intent.putExtra("lastname", lastname);
+                        intent.putExtra("email", email);
+                        intent.putExtra("birthdate", birthdate);
+                        intent.putExtra("password", password);
+                        intent.putExtra("user_id", user.get("user_id").getAsInt());
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                    }
+
+
+                } else if (responseCode == HttpURLConnection.HTTP_NOT_FOUND) {
+                    toastMessage = "Errore del server!";
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                toastMessage = "Impossibile connettersi!";
+            } finally {
+                if (urlConnection != null)
+                    urlConnection.disconnect();
+            }
+            return user;
+        }
+
+        @Override
+        protected void onPostExecute(JsonObject user) {
+
+            Toast responseToast = Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_LONG);
+            if (user == null)
+                responseToast.show();
+
+        }
+
+
+        private String readStream(InputStream in) throws UnsupportedEncodingException {
+
+            BufferedReader reader = null;
+            StringBuffer response = new StringBuffer();
+
+            try {
+
+                reader = new BufferedReader(new InputStreamReader(in));
+                String line = "";
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+
+            } catch (IOException e) {
+
+                e.printStackTrace();
+
+            } finally {
+
+                if (reader != null) {
+
+
+                    try {
+
+                        reader.close();
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+            return response.toString();
+        }
+
     }
+
 }
+
+
+
+
+
 
 
