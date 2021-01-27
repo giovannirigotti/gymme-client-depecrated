@@ -121,7 +121,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#00FFFFFF"
-                        android:hint="I tuoi disturbi"
+                        android:hint="Il "
                         android:inputType="textMultiLine"
                         android:lines="5"
                         android:maxLines="10"

@@ -415,6 +415,7 @@ public class SignupActivity2 extends AppCompatActivity {
                 responseCode = urlConnection.getResponseCode();
 
                 if (responseCode == HttpURLConnection.HTTP_OK) {
+                    Log.e("ok", "ok");
                     new CheckUserDataConnection().execute(email);
                 } else if (responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
                     Log.e("Server response", "Error during signup!");
@@ -484,6 +485,7 @@ public class SignupActivity2 extends AppCompatActivity {
                         intent.putExtra("birthdate", birthdate);
                         intent.putExtra("password", password);
                         intent.putExtra("user_id", user.get("user_id").getAsInt());
+
                         startActivity(intent);
                         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     }
