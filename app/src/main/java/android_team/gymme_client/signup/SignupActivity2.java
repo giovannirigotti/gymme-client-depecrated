@@ -29,14 +29,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import android_team.gymme_client.R;
+import android_team.gymme_client.login.LoginActivity;
 import android_team.gymme_client.support.Fx;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SignupActivity2 extends AppCompatActivity {
 
-    @BindView(R.id.back_to_signup1_button)
-    ImageButton _back_to_signup1_button;
+
 
     @BindView(R.id.dropdown_button_gym_user)
     ImageButton _dropdown_button_gym_user;
@@ -89,14 +89,6 @@ public class SignupActivity2 extends AppCompatActivity {
 
         setContentView(R.layout.activity_signup_2);
         ButterKnife.bind(this);
-
-
-        _back_to_signup1_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
 
         name = getIntent().getStringExtra("name");
@@ -477,6 +469,58 @@ public class SignupActivity2 extends AppCompatActivity {
 
                     ////aggiungere i reindirizzamenti alle pagine di signup dati specifici in base agli altir tipi di utente
 
+                    switch (user_type){
+                        case 0: //customer
+                            Intent intentCustomer = new Intent(getApplicationContext(), CustomerSignupActivity.class);
+                            intentCustomer.putExtra("name", name);
+                            intentCustomer.putExtra("lastname", lastname);
+                            intentCustomer.putExtra("email", email);
+                            intentCustomer.putExtra("birthdate", birthdate);
+                            intentCustomer.putExtra("password", password);
+                            intentCustomer.putExtra("user_id", user.get("user_id").getAsInt());
+                            startActivity(intentCustomer);
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                            break;
+                        case 1: //trainer
+                            Intent intentTrainer = new Intent(getApplicationContext(), TrainerSignupActivity.class);
+                            intentTrainer.putExtra("name", name);
+                            intentTrainer.putExtra("lastname", lastname);
+                            intentTrainer.putExtra("email", email);
+                            intentTrainer.putExtra("birthdate", birthdate);
+                            intentTrainer.putExtra("password", password);
+                            intentTrainer.putExtra("user_id", user.get("user_id").getAsInt());
+                            startActivity(intentTrainer);
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                            break;
+                        case 2: //nutrituionist
+                            Intent intentNutritionist = new Intent(getApplicationContext(), NutritionistSignupActivity.class);
+                            intentNutritionist.putExtra("name", name);
+                            intentNutritionist.putExtra("lastname", lastname);
+                            intentNutritionist.putExtra("email", email);
+                            intentNutritionist.putExtra("birthdate", birthdate);
+                            intentNutritionist.putExtra("password", password);
+                            intentNutritionist.putExtra("user_id", user.get("user_id").getAsInt());
+                            startActivity(intentNutritionist);
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                            break;
+                        case 3: //gym
+                            Intent intentGym = new Intent(getApplicationContext(), GymSignupActivity.class);
+                            intentGym.putExtra("name", name);
+                            intentGym.putExtra("lastname", lastname);
+                            intentGym.putExtra("email", email);
+                            intentGym.putExtra("birthdate", birthdate);
+                            intentGym.putExtra("password", password);
+                            intentGym.putExtra("user_id", user.get("user_id").getAsInt());
+                            startActivity(intentGym);
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                            break;
+                        default:
+                            Intent intentLogin = new Intent(getApplicationContext(), LoginActivity.class);
+                            startActivity(intentLogin);
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                            Toast.makeText(getApplicationContext(), "Errore generico!", Toast.LENGTH_LONG).show();
+                    }
+
                     if (user_type == 0) {
                         Intent intent = new Intent(getApplicationContext(), CustomerSignupActivity.class);
                         intent.putExtra("name", name);
@@ -505,13 +549,14 @@ public class SignupActivity2 extends AppCompatActivity {
             return user;
         }
 
+
+
         @Override
         protected void onPostExecute(JsonObject user) {
 
             Toast responseToast = Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_LONG);
             if (user == null) {
                 responseToast.show();
-                Log.e("toastmerda", "toastmerda");
             }
             enableButtons();
 

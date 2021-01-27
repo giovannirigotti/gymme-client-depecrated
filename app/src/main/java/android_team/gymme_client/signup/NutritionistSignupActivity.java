@@ -24,11 +24,11 @@ public class NutritionistSignupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup_trainer);
+        setContentView(R.layout.activity_signup_nutritionist);
 
        /* _qualificazione = (EditText) findViewById(R.id.et_qualificazione);
         _codiceFiscale = (EditText) findViewById(R.id.ed_codice_fiscale);
-        _btnRegistrazione = (Button) findViewById(R.id.btn_end_registrazione); */
+        _btnRegistrazione = (Button) findViewById(R.id.btn_end_registrazione);
 
         // region CHECK INTENT
         Intent i = getIntent();
@@ -58,6 +58,9 @@ public class NutritionistSignupActivity extends AppCompatActivity {
                 }
             }
         });
+
+         */
+
     }
 
     private void add_trainer(Integer user_id, String qualificazione, String codice_fiscale) {

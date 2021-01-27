@@ -1,4 +1,4 @@
-package android_team.gymme_client.trainer;
+package android_team.gymme_client.signup;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android_team.gymme_client.R;
 import android_team.gymme_client.login.LoginActivity;
 
-public class SignupTrainer extends AppCompatActivity {
+public class TrainerSignupActivity extends AppCompatActivity {
 
     EditText _qualificazione;
     EditText _codiceFiscale;
@@ -29,7 +29,7 @@ public class SignupTrainer extends AppCompatActivity {
         _qualificazione = (EditText) findViewById(R.id.et_qualificazione);
         _codiceFiscale = (EditText) findViewById(R.id.ed_codice_fiscale);
         _btnRegistrazione = (Button) findViewById(R.id.btn_end_registrazione);
-        */
+
 
 
         // region CHECK INTENT
@@ -47,7 +47,7 @@ public class SignupTrainer extends AppCompatActivity {
                 startActivity(new_i);
             }
         }
-        // endregion //
+
 
         _btnRegistrazione.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,6 +60,9 @@ public class SignupTrainer extends AppCompatActivity {
                 }
             }
         });
+
+
+         */
     }
 
     private void add_trainer(Integer user_id, String qualificazione, String codice_fiscale) {
