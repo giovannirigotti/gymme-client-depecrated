@@ -8,8 +8,10 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -31,6 +33,8 @@ public class CustomerHomeActivity extends AppCompatActivity {
 
     @BindView(R.id.send_notification_button)
     Button _send_notification_button;
+    @BindView(R.id.control_notification_button)
+    Button _control_notification_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,16 +53,36 @@ public class CustomerHomeActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+        _control_notification_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Log.e("provaa", "prova");
+                    recive_notification();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
 
     private void send_notification() throws IOException {
+
+        //Da cambiare
         String notification_type = "1";
         String text = "notifica";
         String user_id = "1";
+        //
         new SendNotification().execute(notification_type, text, user_id);
     }
 
+
+    private void recive_notification() throws IOException {
+        new ReciveNotification().execute();
+    }
 
     private class SendNotification extends AsyncTask<String, String, JsonObject> {
 
@@ -124,5 +148,79 @@ public class CustomerHomeActivity extends AppCompatActivity {
             return notification;
         }
 
+    }
+
+    private class ReciveNotification extends AsyncTask<String, String, JsonArray>{
+
+        String toastMessage = null;
+
+        @Override
+        protected JsonArray doInBackground(String... params) {
+
+
+            URL url;
+            HttpURLConnection urlConnection = null;
+            JsonArray notification = null;
+
+            try {
+                url = new URL("http://10.0.2.2:4000/get_notifications/1");
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setConnectTimeout(5000);
+                urlConnection.connect();
+                int responseCode = urlConnection.getResponseCode();
+                urlConnection.disconnect();
+
+
+
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+
+                    String responseString = readStream(urlConnection.getInputStream());
+                    Log.v("Server response", "User found: " + responseString);
+                    notification = JsonParser.parseString(responseString).getAsJsonArray();
+
+                /*    int id = notification.get("notification_id").getAsInt();
+                    int type = notification.get("notification_type").getAsInt();
+                    String text = notification.get("text").getAsString();
+                    int userId = notification.get("notification_type").getAsInt();
+                */
+                    Log.e("gesu", String.valueOf(notification));
+                }
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                toastMessage = "Impossibile ricevere notifiche!";
+            } finally {
+                if (urlConnection != null)
+                    urlConnection.disconnect();
+            }
+            return notification;
+        }
+
+    }
+
+
+    private String readStream(InputStream in) throws UnsupportedEncodingException {
+        BufferedReader reader = null;
+        StringBuffer response = new StringBuffer();
+        try {
+            reader = new BufferedReader(new InputStreamReader(in));
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return response.toString();
     }
 }
