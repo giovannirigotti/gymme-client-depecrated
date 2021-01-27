@@ -16,19 +16,19 @@
             android:required="false" />
 
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
         </activity>
         <activity android:name=".support.NoNetworkActivity">
         </activity>
         <activity android:name=".login.LoginActivity"
-            android:windowSoftInputMode="stateVisible|adjustPan">
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".signup.SignupActivity"
-            android:windowSoftInputMode="stateVisible|adjustPan">
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
         </activity>
         <activity android:name=".signup.SignupActivity2"
             android:windowSoftInputMode="stateVisible|adjustPan">
@@ -36,8 +36,7 @@
         <activity android:name=".customer.CustomerHomeActivity">
         </activity>
         <activity android:name=".signup.CustomerSignupActivity"
-            android:windowSoftInputMode="stateVisible|adjustPan">
-
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
         </activity>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />

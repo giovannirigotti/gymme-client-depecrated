@@ -3,67 +3,77 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:backgroundTint="#00FFFFFF">
 
     @Value: #ff9a2e
 
+    <ImageView
+        android:id="@+id/imageView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/signup_bg_shape_2" />
+
     <LinearLayout
-        android:layout_width="409dp"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
-        <Space
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:adjustViewBounds="true"
+            app:srcCompat="@drawable/signup_bg_shape_1" />
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+
+            <ImageButton
+                android:id="@+id/back_to_signup1_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:background="#00FFFFFF"
+                android:contentDescription="@string/back"
+                android:padding="10dp"
+                android:src="@drawable/ic_baseline_arrow_back_24"
+                app:iconPadding="0dp"></ImageButton>
+
+            <TextView
+                android:id="@+id/title_signup2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:text="@string/choose_user_type"
+                android:textSize="20sp" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="340dp"
             android:layout_height="wrap_content"
+            android:background="@drawable/rounded_rectangle"
             android:orientation="vertical">
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-
-                <ImageButton
-                    android:id="@+id/back_to_signup1_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:background="@color/colorPrimary"
-                    android:contentDescription="@string/back"
-                    android:padding="10dp"
-                    android:src="@drawable/ic_baseline_arrow_back_24"
-                    app:iconPadding="0dp"></ImageButton>
-
-                <TextView
-                    android:id="@+id/title_signup2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="10dp"
-                    android:layout_weight="1"
-                    android:text="@string/choose_user_type"
-                    android:textSize="20sp" />
-
-            </LinearLayout>
-
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="30dp" />
 
 
             <LinearLayout
@@ -115,14 +125,14 @@
                     style="@style/AppTheme"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone">
-                </ProgressBar>
+                    android:visibility="gone"></ProgressBar>
 
                 <Button
                     android:id="@+id/signup_button_gym_user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/signup_yourself" />
+                    android:text="@string/signup_yourself"
+                    app:cornerRadius="30dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -176,14 +186,14 @@
                     style="@style/AppTheme"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone">
-                </ProgressBar>
+                    android:visibility="gone"></ProgressBar>
 
                 <Button
                     android:id="@+id/signup_button_gym_trainer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/signup_yourself" />
+                    android:text="@string/signup_yourself"
+                    app:cornerRadius="30dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -236,14 +246,14 @@
                     style="@style/AppTheme"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone">
-                </ProgressBar>
+                    android:visibility="gone"></ProgressBar>
 
                 <Button
                     android:id="@+id/signup_button_gym_nutritionist"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/signup_yourself" />
+                    android:text="@string/signup_yourself"
+                    app:cornerRadius="30dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -296,14 +306,14 @@
                     style="@style/AppTheme"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone">
-                </ProgressBar>
+                    android:visibility="gone"></ProgressBar>
 
                 <Button
                     android:id="@+id/signup_button_gym_owner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/signup_yourself" />
+                    android:text="@string/signup_yourself"
+                    app:cornerRadius="30dp" />
             </LinearLayout>
 
 

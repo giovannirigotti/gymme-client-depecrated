@@ -3,6 +3,7 @@ package android_team.gymme_client.signup;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -86,7 +87,7 @@ public class SignupActivity2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
 
-        setContentView(R.layout.signup_activity2);
+        setContentView(R.layout.activity_signup_2);
         ButterKnife.bind(this);
 
 
@@ -140,12 +141,15 @@ public class SignupActivity2 extends AppCompatActivity {
         _signup_button_gym_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startSpinner(0);
                 signUp(name, lastname, email, birthdate, password, 0);
+
             }
         });
         _signup_button_gym_trainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startSpinner(1);
                 signUp(name, lastname, email, birthdate, password, 1);
             }
         });
@@ -153,6 +157,7 @@ public class SignupActivity2 extends AppCompatActivity {
         _signup_button_gym_nutritionist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startSpinner(2);
                 signUp(name, lastname, email, birthdate, password, 2);
             }
         });
@@ -160,6 +165,7 @@ public class SignupActivity2 extends AppCompatActivity {
         _signup_button_gym_owner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startSpinner(3);
                 signUp(name, lastname, email, birthdate, password, 3);
             }
         });
@@ -171,15 +177,22 @@ public class SignupActivity2 extends AppCompatActivity {
             _signup_gym_user_info.setVisibility(View.GONE);
             _dropdown_button_gym_user.setImageResource(R.drawable.ic_arrow_drop_down_white_24dp);
         } else {
+            if (_signup_gym_trainer_info.isShown())
+                hideInfo(_signup_gym_trainer_info, _dropdown_button_gym_trainer);
+            if (_signup_gym_nutritionist_info.isShown())
+                hideInfo(_signup_gym_nutritionist_info, _dropdown_button_gym_nutritionist);
+            if (_signup_gym_owner_info.isShown())
+                hideInfo(_signup_gym_owner_info, _dropdown_button_gym_owner);
 
-            hideInfo(_signup_gym_trainer_info, _dropdown_button_gym_trainer);
-            hideInfo(_signup_gym_nutritionist_info, _dropdown_button_gym_nutritionist);
-            hideInfo(_signup_gym_owner_info, _dropdown_button_gym_owner);
-            Fx.slide_down(getApplicationContext(), _signup_gym_user_info);
-            _signup_gym_user_info.setVisibility(View.VISIBLE);
-            _dropdown_button_gym_user.setImageResource(R.drawable.ic_arrow_drop_up_white_24dp);
-
-
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Fx.slide_down(getApplicationContext(), _signup_gym_user_info);
+                    _signup_gym_user_info.setVisibility(View.VISIBLE);
+                    _dropdown_button_gym_user.setImageResource(R.drawable.ic_arrow_drop_up_white_24dp);
+                }
+            }, 100);
         }
     }
 
@@ -190,15 +203,22 @@ public class SignupActivity2 extends AppCompatActivity {
             _dropdown_button_gym_trainer.setImageResource(R.drawable.ic_arrow_drop_down_white_24dp);
         } else {
 
+            if (_signup_button_gym_user.isShown())
+                hideInfo(_signup_gym_user_info, _dropdown_button_gym_user);
+            if (_signup_gym_nutritionist_info.isShown())
+                hideInfo(_signup_gym_nutritionist_info, _dropdown_button_gym_nutritionist);
+            if (_signup_gym_owner_info.isShown())
+                hideInfo(_signup_gym_owner_info, _dropdown_button_gym_owner);
 
-            hideInfo(_signup_gym_user_info, _dropdown_button_gym_user);
-            hideInfo(_signup_gym_nutritionist_info, _dropdown_button_gym_nutritionist);
-            hideInfo(_signup_gym_owner_info, _dropdown_button_gym_owner);
-
-            Fx.slide_down(getApplicationContext(), _signup_gym_trainer_info);
-            _signup_gym_trainer_info.setVisibility(View.VISIBLE);
-            _dropdown_button_gym_trainer.setImageResource(R.drawable.ic_arrow_drop_up_white_24dp);
-
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Fx.slide_down(getApplicationContext(), _signup_gym_trainer_info);
+                    _signup_gym_trainer_info.setVisibility(View.VISIBLE);
+                    _dropdown_button_gym_trainer.setImageResource(R.drawable.ic_arrow_drop_up_white_24dp);
+                }
+            }, 100);
         }
     }
 
@@ -208,15 +228,23 @@ public class SignupActivity2 extends AppCompatActivity {
             _signup_gym_nutritionist_info.setVisibility(View.GONE);
             _dropdown_button_gym_nutritionist.setImageResource(R.drawable.ic_arrow_drop_down_white_24dp);
         } else {
+            if (_signup_gym_trainer_info.isShown())
+                hideInfo(_signup_gym_trainer_info, _dropdown_button_gym_trainer);
+            if (_signup_button_gym_user.isShown())
+                hideInfo(_signup_gym_user_info, _dropdown_button_gym_user);
+            if (_signup_gym_owner_info.isShown())
+                hideInfo(_signup_gym_owner_info, _dropdown_button_gym_owner);
 
 
-            hideInfo(_signup_gym_trainer_info, _dropdown_button_gym_trainer);
-            hideInfo(_signup_gym_user_info, _dropdown_button_gym_user);
-            hideInfo(_signup_gym_owner_info, _dropdown_button_gym_owner);
-
-            Fx.slide_down(getApplicationContext(), _signup_gym_nutritionist_info);
-            _signup_gym_nutritionist_info.setVisibility(View.VISIBLE);
-            _dropdown_button_gym_nutritionist.setImageResource(R.drawable.ic_arrow_drop_up_white_24dp);
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Fx.slide_down(getApplicationContext(), _signup_gym_nutritionist_info);
+                    _signup_gym_nutritionist_info.setVisibility(View.VISIBLE);
+                    _dropdown_button_gym_nutritionist.setImageResource(R.drawable.ic_arrow_drop_up_white_24dp);
+                }
+            }, 100);
 
         }
     }
@@ -227,18 +255,28 @@ public class SignupActivity2 extends AppCompatActivity {
             _signup_gym_owner_info.setVisibility(View.GONE);
             _dropdown_button_gym_owner.setImageResource(R.drawable.ic_arrow_drop_down_white_24dp);
         } else {
-            hideInfo(_signup_gym_trainer_info, _dropdown_button_gym_trainer);
-            hideInfo(_signup_gym_nutritionist_info, _dropdown_button_gym_nutritionist);
-            hideInfo(_signup_gym_user_info, _dropdown_button_gym_user);
+            if (_signup_gym_trainer_info.isShown())
+                hideInfo(_signup_gym_trainer_info, _dropdown_button_gym_trainer);
+            if (_signup_gym_nutritionist_info.isShown())
+                hideInfo(_signup_gym_nutritionist_info, _dropdown_button_gym_nutritionist);
+            if (_signup_button_gym_user.isShown())
+                hideInfo(_signup_gym_user_info, _dropdown_button_gym_user);
 
-            Fx.slide_down(getApplicationContext(), _signup_gym_owner_info);
-            _signup_gym_owner_info.setVisibility(View.VISIBLE);
-            _dropdown_button_gym_owner.setImageResource(R.drawable.ic_arrow_drop_up_white_24dp);
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Fx.slide_down(getApplicationContext(), _signup_gym_owner_info);
+                    _signup_gym_owner_info.setVisibility(View.VISIBLE);
+                    _dropdown_button_gym_owner.setImageResource(R.drawable.ic_arrow_drop_up_white_24dp);
+                }
+            }, 100);
         }
     }
 
+
     private void hideInfo(LinearLayout layout, ImageButton button) {
-        Fx.slide_up(getApplicationContext(), layout);
+        Fx.slide_up_0(getApplicationContext(), layout);
         layout.setVisibility(View.GONE);
         button.setImageResource(R.drawable.ic_arrow_drop_down_white_24dp);
     }
@@ -254,6 +292,20 @@ public class SignupActivity2 extends AppCompatActivity {
         _dropdown_button_gym_trainer.setEnabled(false);
         _dropdown_button_gym_nutritionist.setEnabled(false);
         _dropdown_button_gym_owner.setEnabled(false);
+
+    }
+
+    private void enableButtons() {
+
+        _signup_button_gym_user.setEnabled(true);
+        _signup_button_gym_trainer.setEnabled(true);
+        _signup_button_gym_nutritionist.setEnabled(true);
+        _signup_button_gym_owner.setEnabled(true);
+
+        _dropdown_button_gym_user.setEnabled(true);
+        _dropdown_button_gym_trainer.setEnabled(true);
+        _dropdown_button_gym_nutritionist.setEnabled(true);
+        _dropdown_button_gym_owner.setEnabled(true);
 
     }
 
@@ -288,32 +340,26 @@ public class SignupActivity2 extends AppCompatActivity {
         _progress_bar_gym_user.setVisibility(View.GONE);
         _signup_button_gym_user.setEnabled(true);
 
-        _signup_button_gym_trainer.setVisibility(View.GONE);
-        _progress_bar_gym_trainer.setVisibility(View.VISIBLE);
+        _signup_button_gym_trainer.setVisibility(View.VISIBLE);
+        _progress_bar_gym_trainer.setVisibility(View.GONE);
         _signup_button_gym_trainer.setEnabled(true);
 
-        _signup_button_gym_nutritionist.setVisibility(View.GONE);
-        _progress_bar_gym_nutritionist.setVisibility(View.VISIBLE);
+        _signup_button_gym_nutritionist.setVisibility(View.VISIBLE);
+        _progress_bar_gym_nutritionist.setVisibility(View.GONE);
         _signup_button_gym_nutritionist.setEnabled(true);
 
 
-        _signup_button_gym_owner.setVisibility(View.GONE);
-        _progress_bar_gym_owner.setVisibility(View.VISIBLE);
+        _signup_button_gym_owner.setVisibility(View.VISIBLE);
+        _progress_bar_gym_owner.setVisibility(View.GONE);
         _signup_button_gym_owner.setEnabled(true);
 
-        Toast responseToast = Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_LONG);
-        responseToast.show();
+        if(toastMessage!=null) {
+            Toast responseToast = Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_LONG);
+            responseToast.show();
 
-
+        }
     }
 
-    private void signupSuccess() {
-/*
-        Intent intent = new Intent(getApplicationContext(), SignupSuccessfulActivity.class);
-        startActivity(intent);
-        finish();
-*/
-    }
 
     private void signUp(String name, String lastname, String email, String birthdate, String password, int type) {
         disableButtons();
@@ -321,7 +367,6 @@ public class SignupActivity2 extends AppCompatActivity {
         new RegisterBaseUserConnection().execute(name, lastname, email, birthdate, password, Integer.toString(type));
 
     }
-
 
     private class RegisterBaseUserConnection extends AsyncTask<String, String, Integer> {
 
@@ -368,19 +413,13 @@ public class SignupActivity2 extends AppCompatActivity {
 
                 urlConnection.connect();
                 responseCode = urlConnection.getResponseCode();
-                Log.e("response code regi", Integer.toString(responseCode));
 
                 if (responseCode == HttpURLConnection.HTTP_OK) {
-
                     new CheckUserDataConnection().execute(email);
-
-
                 } else if (responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
                     Log.e("Server response", "Error during signup!");
                     toastMessage = "Errore nella registrazione di un nuovo utente!";
-                } else if (responseCode == HttpURLConnection.HTTP_CONFLICT) {
-                    Log.e("Server response", "Error during signup!");
-                    toastMessage = "Esiste già un account registrato con questa email!";
+                    urlConnection.disconnect();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -395,10 +434,13 @@ public class SignupActivity2 extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Integer responseCode) {
-           stopSpinner(toastMessage);
+            enableButtons();
+            stopSpinner(toastMessage);
 
         }
     }
+
+
 
 
     private class CheckUserDataConnection extends AsyncTask<String, String, JsonObject> {
@@ -426,7 +468,6 @@ public class SignupActivity2 extends AppCompatActivity {
                 urlConnection.disconnect();
 
                 if (responseCode == HttpURLConnection.HTTP_OK) {
-
 
                     String responseString = readStream(urlConnection.getInputStream());
                     user = JsonParser.parseString(responseString).getAsJsonObject();
@@ -466,8 +507,11 @@ public class SignupActivity2 extends AppCompatActivity {
         protected void onPostExecute(JsonObject user) {
 
             Toast responseToast = Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_LONG);
-            if (user == null)
+            if (user == null) {
                 responseToast.show();
+                Log.e("toastmerda", "toastmerda");
+            }
+            enableButtons();
 
         }
 

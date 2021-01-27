@@ -367,7 +367,7 @@ public class SignupActivity extends AppCompatActivity {
             _birthdateText.setEnabled(true);
 
             Toast responseToast = Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_LONG);
-            if (user == null)
+            if (toastMessage != null)
                 responseToast.show();
         }
     }
