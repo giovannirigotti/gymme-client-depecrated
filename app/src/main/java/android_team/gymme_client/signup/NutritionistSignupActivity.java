@@ -1,4 +1,4 @@
-package android_team.gymme_client.nutritionist;
+package android_team.gymme_client.signup;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android_team.gymme_client.R;
 import android_team.gymme_client.login.LoginActivity;
 
-public class SignupNutritionist extends AppCompatActivity {
+public class NutritionistSignupActivity extends AppCompatActivity {
 
     EditText _qualificazione;
     EditText _codiceFiscale;
@@ -26,9 +26,9 @@ public class SignupNutritionist extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup_trainer);
 
-        _qualificazione = (EditText) findViewById(R.id.et_qualificazione);
+       /* _qualificazione = (EditText) findViewById(R.id.et_qualificazione);
         _codiceFiscale = (EditText) findViewById(R.id.ed_codice_fiscale);
-        _btnRegistrazione = (Button) findViewById(R.id.btn_end_registrazione);
+        _btnRegistrazione = (Button) findViewById(R.id.btn_end_registrazione); */
 
         // region CHECK INTENT
         Intent i = getIntent();

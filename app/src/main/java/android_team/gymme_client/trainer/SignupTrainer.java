@@ -25,10 +25,12 @@ public class SignupTrainer extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup_trainer);
-
+        /*
         _qualificazione = (EditText) findViewById(R.id.et_qualificazione);
         _codiceFiscale = (EditText) findViewById(R.id.ed_codice_fiscale);
         _btnRegistrazione = (Button) findViewById(R.id.btn_end_registrazione);
+        */
+
 
         // region CHECK INTENT
         Intent i = getIntent();
@@ -39,7 +41,7 @@ public class SignupTrainer extends AppCompatActivity {
         } else {
             user_id = i.getIntExtra("user_id", -1);
             Log.w("user_id ricevuto:", String.valueOf(user_id));
-            if(user_id == -1){
+            if (user_id == -1) {
                 Toast.makeText(this, "User non creato.", Toast.LENGTH_LONG).show();
                 Intent new_i = new Intent(this, LoginActivity.class);
                 startActivity(new_i);
@@ -51,7 +53,7 @@ public class SignupTrainer extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Controllo inserimento dati
-                if(checkData()){ //DATI OK
+                if (checkData()) { //DATI OK
                     String codice_fiscale = String.valueOf(_codiceFiscale.getText());
                     String qualificazione = String.valueOf(_qualificazione.getText());
                     add_trainer(user_id, qualificazione, codice_fiscale);
@@ -65,8 +67,8 @@ public class SignupTrainer extends AppCompatActivity {
     }
 
 
-    private boolean checkData(){
-        if (_qualificazione.getText().length() == 0 || _codiceFiscale.getText().length() == 0){
+    private boolean checkData() {
+        if (_qualificazione.getText().length() == 0 || _codiceFiscale.getText().length() == 0) {
             Toast.makeText(this, "Inserisci una qualificazione e il tuo codice fiscale", Toast.LENGTH_LONG).show();
             return false;
         } else {

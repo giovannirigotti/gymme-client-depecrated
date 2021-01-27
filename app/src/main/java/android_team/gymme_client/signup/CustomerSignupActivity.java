@@ -12,6 +12,9 @@ public class CustomerSignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_signup_customer);
+
+
+
     }
 
 }
