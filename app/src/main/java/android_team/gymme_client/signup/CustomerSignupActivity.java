@@ -48,6 +48,7 @@ public class CustomerSignupActivity extends AppCompatActivity {
     Button _signup_button_final_customer;
 
     int user_id;
+    String email;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,25 +59,25 @@ public class CustomerSignupActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         if (!i.hasExtra("user_id")) {
-            Toast.makeText(this, "User non creato", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Utente non creato", Toast.LENGTH_LONG).show();
             Intent new_i = new Intent(this, LoginActivity.class);
             startActivity(new_i);
         } else {
             user_id = i.getIntExtra("user_id", -1);
             Log.w("user_id ricevuto:", String.valueOf(user_id));
             if (user_id == -1) {
-                Toast.makeText(this, "User non creato.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Utente non creato.", Toast.LENGTH_LONG).show();
                 Intent new_i = new Intent(this, LoginActivity.class);
                 startActivity(new_i);
             }
         }
 
+        email = i.getStringExtra("email");
+
         _signup_button_final_customer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 validateFields();
-
             }
         });
 
@@ -89,30 +90,21 @@ public class CustomerSignupActivity extends AppCompatActivity {
 
 
     private void validateFields() {
-
         if (_customer_height_signup_edit_text.getText().toString().isEmpty()) {
-
             if (_customer_height_signup_edit_text.getText().toString().isEmpty()) {
                 _customer_height_signup_text_input.setDefaultHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
                 _customer_height_signup_text_input.setHint("Inserisci l'altezza!");
                 _customer_height_signup_text_input.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
-
             }
-
         } else {
-
             String height = _customer_height_signup_edit_text.getText().toString();
             String diseases = _customer_diseases_signup_edit_text.getText().toString();
             String allergies = _customer_allergies_signup_edit_text.getText().toString();
-
             new RegisterCustomerConnection().execute(Integer.toString(user_id), height, diseases, allergies);
-
         }
     }
 
-
     private class RegisterCustomerConnection extends AsyncTask<String, String, Integer> {
-
         String toastMessage = null;
 
         @Override
@@ -131,18 +123,12 @@ public class CustomerSignupActivity extends AppCompatActivity {
                 urlConnection.setRequestMethod("POST");
                 urlConnection.setConnectTimeout(5000);
                 urlConnection.setRequestProperty("Content-Type", "application/json");
-
                 JsonObject paramsJson = new JsonObject();
-
                 paramsJson.addProperty("user_id", params[0]);
                 paramsJson.addProperty("height", params[1]);
                 paramsJson.addProperty("diseases", params[2]);
                 paramsJson.addProperty("allergies", params[3]);
-
-                Log.e("json", paramsJson.toString());
-
                 urlConnection.setDoOutput(true);
-
                 OutputStream os = urlConnection.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(
                         new OutputStreamWriter(os, "UTF-8"));
@@ -150,17 +136,16 @@ public class CustomerSignupActivity extends AppCompatActivity {
                 writer.flush();
                 writer.close();
                 os.close();
-
                 urlConnection.connect();
                 responseCode = urlConnection.getResponseCode();
-
                 if (responseCode == HttpURLConnection.HTTP_OK) {
-
                     Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                    i.putExtra("email", email);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
+                    urlConnection.disconnect();
+                    toastMessage = "Dati registrati correttamente!";
                     finish();
-
-                   toastMessage="Dati registrati correttamente!";
                 } else if (responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
                     Log.e("Server response", "Error during signup!");
                     toastMessage = "Errore nella registrazione di un nuovo utente!";
@@ -179,8 +164,7 @@ public class CustomerSignupActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Integer responseCode) {
-
-            Toast.makeText(getApplicationContext(),toastMessage, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_LONG).show();
 
         }
     }

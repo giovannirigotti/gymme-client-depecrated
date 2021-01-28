@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="gymme-client/app" />
-      <module fileurl="file://$PROJECT_DIR$/gymme-client.iml" filepath="$PROJECT_DIR$/gymme-client.iml" group="gymme-client" />
+      <module fileurl="file://$PROJECT_DIR$/gymme-client.iml" filepath="$PROJECT_DIR$/gymme-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/gymme-client.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/gymme-client.app.iml" />
     </modules>
   </component>
 </project>

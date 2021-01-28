@@ -77,7 +77,13 @@ public class LoginActivity extends AppCompatActivity {
         dbManagerUser.open();
         ButterKnife.bind(this);
 
-       _signup_link.setOnClickListener(new View.OnClickListener() {
+        if(getIntent().hasExtra("email")){
+            Log.e("eail", getIntent().getStringExtra("email"));
+            _emailText.setText(getIntent().getStringExtra("email"));
+        }
+
+
+        _signup_link.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), SignupActivity.class);

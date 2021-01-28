@@ -1,19 +1,29 @@
 package android_team.gymme_client.signup;
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -35,7 +45,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SignupActivity2 extends AppCompatActivity {
-
 
 
     @BindView(R.id.dropdown_button_gym_user)
@@ -133,32 +142,27 @@ public class SignupActivity2 extends AppCompatActivity {
         _signup_button_gym_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startSpinner(0);
-                signUp(name, lastname, email, birthdate, password, 0);
-
+                showDialog(SignupActivity2.this, "Utente Palestra", 0);
             }
         });
         _signup_button_gym_trainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startSpinner(1);
-                signUp(name, lastname, email, birthdate, password, 1);
+                showDialog(SignupActivity2.this, "Personal Trainer", 1);
             }
         });
 
         _signup_button_gym_nutritionist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startSpinner(2);
-                signUp(name, lastname, email, birthdate, password, 2);
+                showDialog(SignupActivity2.this, "Nutrizionista", 2);
             }
         });
 
         _signup_button_gym_owner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startSpinner(3);
-                signUp(name, lastname, email, birthdate, password, 3);
+                showDialog(SignupActivity2.this, "Proprietario palestra", 3);
             }
         });
     }
@@ -267,6 +271,66 @@ public class SignupActivity2 extends AppCompatActivity {
     }
 
 
+    private class CustomDialogClass extends Dialog implements
+            android.view.View.OnClickListener {
+
+        public Activity c;
+        public Dialog d;
+        public Button yes, no;
+        public TextView _userType;
+        String userType;
+        int type;
+
+        public CustomDialogClass(Activity a, String userType, int type) {
+            super(a);
+            this.c = a;
+            this.userType = userType;
+            this.type = type;
+        }
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            setContentView(R.layout.dialog_confirm_user_type);
+            yes = (Button) findViewById(R.id.dialog_confirm_user_type_yes);
+            no = (Button) findViewById(R.id.dialog_confirm_user_type_no);
+            _userType = (TextView) findViewById(R.id.dialog_confirm_user_type_text);
+            _userType.setText(userType + " ?");
+            yes.setOnClickListener(this);
+            no.setOnClickListener(this);
+        }
+
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.dialog_confirm_user_type_yes:
+                    signUp(name, lastname, email, birthdate, password, type);
+                    break;
+                case R.id.dialog_confirm_user_type_no:
+                    stopSpinner(null);
+                    dismiss();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private void showDialog(Activity a, String userType, int type) {
+        startSpinner(type);
+        CustomDialogClass cdd = new CustomDialogClass(a, userType, type);
+        cdd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        cdd.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(final DialogInterface arg0) {
+                stopSpinner(null);
+            }
+        });
+        cdd.show();
+    }
+
     private void hideInfo(LinearLayout layout, ImageButton button) {
         Fx.slide_up_0(getApplicationContext(), layout);
         layout.setVisibility(View.GONE);
@@ -345,7 +409,7 @@ public class SignupActivity2 extends AppCompatActivity {
         _progress_bar_gym_owner.setVisibility(View.GONE);
         _signup_button_gym_owner.setEnabled(true);
 
-        if(toastMessage!=null) {
+        if (toastMessage != null) {
             Toast responseToast = Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_LONG);
             responseToast.show();
 
@@ -434,8 +498,6 @@ public class SignupActivity2 extends AppCompatActivity {
     }
 
 
-
-
     private class CheckUserDataConnection extends AsyncTask<String, String, JsonObject> {
 
         String toastMessage = null;
@@ -469,7 +531,7 @@ public class SignupActivity2 extends AppCompatActivity {
 
                     ////aggiungere i reindirizzamenti alle pagine di signup dati specifici in base agli altir tipi di utente
 
-                    switch (user_type){
+                    switch (user_type) {
                         case 0: //customer
                             Intent intentCustomer = new Intent(getApplicationContext(), CustomerSignupActivity.class);
                             intentCustomer.putExtra("name", name);
@@ -548,7 +610,6 @@ public class SignupActivity2 extends AppCompatActivity {
             }
             return user;
         }
-
 
 
         @Override

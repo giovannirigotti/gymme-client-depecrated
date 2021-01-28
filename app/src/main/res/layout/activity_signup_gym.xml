@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -40,6 +39,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
             android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
@@ -48,9 +48,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="10dp"
                 android:layout_weight="1"
-                android:text="@string/signup_yourself"
+                android:text="Inserisci i dettagli"
                 android:textSize="20sp" />
         </LinearLayout>
 
@@ -68,62 +67,100 @@
                 android:orientation="vertical">
 
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/gym_vat_signup_text_input"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_margin="4dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/gym_vat_signup_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#00FFFFFF"
+                        android:hint="Partita IVA"
+                        android:inputType="textMultiLine"
+                        android:lines="1"
+                        android:maxLength="100"
+                        android:maxLines="2"
+                        android:minLines="1"
+                        android:scrollbars="vertical" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/gym_name_signup_text_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/gym_name_signup_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#00FFFFFF"
+                        android:hint="Nome palestra"
+                        android:inputType="textMultiLine"
+                        android:lines="1"
+                        android:maxLength="100"
+                        android:maxLines="2"
+                        android:minLines="1"
+                        android:scrollbars="vertical" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/gym_address_signup_text_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/gym_address_signup_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#00FFFFFF"
+                        android:hint="Indirizzo"
+                        android:inputType="textMultiLine"
+                        android:lines="5"
+                        android:maxLines="10"
+                        android:minLines="1"
+                        android:scrollbars="vertical"
+                        android:maxLength="500"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/zip_code_signup_text_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/gym_zip_code_signup_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#00FFFFFF"
+                        android:hint="CAP"
+                        android:inputType="textMultiLine"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:minLines="1"
+                        android:scrollbars="vertical"
+                        android:maxLength="500"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/signup_button_next_gym"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:orientation="horizontal"/>
-
-
-                <com.google.android.material.textfield.TextInputLayout
-
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="4dp">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#00FFFFFF"
-                        android:hint="Qualifica"
-                        android:inputType="textMultiLine"
-                        android:lines="5"
-                        android:maxLines="10"
-                        android:minLines="1"
-                        android:scrollbars="vertical" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-                <com.google.android.material.textfield.TextInputLayout
-
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="4dp">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#00FFFFFF"
-                        android:hint="Codice fiscale"
-                        android:inputType="textMultiLine"
-                        android:lines="5"
-                        android:maxLines="10"
-                        android:minLines="1"
-                        android:scrollbars="vertical" />
-
-                    <Button
-                        android:id="@+id/signup_button_final_nutritionist"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:text="Registrati"
-                        app:cornerRadius="30dp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
+                    android:layout_marginTop="10dp"
+                    android:text="Avanti"
+                    app:cornerRadius="30dp" />
             </LinearLayout>
         </ScrollView>
-
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

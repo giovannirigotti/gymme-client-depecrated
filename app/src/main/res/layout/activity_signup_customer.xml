@@ -39,6 +39,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
             android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
@@ -47,9 +48,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="10dp"
                 android:layout_weight="1"
-                android:text="@string/signup_yourself"
+                android:text="Inserisci i dettagli"
                 android:textSize="20sp" />
         </LinearLayout>
 
@@ -116,7 +116,8 @@
                         android:lines="5"
                         android:maxLines="10"
                         android:minLines="1"
-                        android:scrollbars="vertical" />
+                        android:scrollbars="vertical"
+                        android:maxLength="500"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -136,16 +137,19 @@
                         android:lines="5"
                         android:maxLines="10"
                         android:minLines="1"
-                        android:scrollbars="vertical" />
+                        android:scrollbars="vertical"
+                        android:maxLength="500"/>
 
-                    <Button
-                        android:id="@+id/signup_button_final_customer"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:text="Registrati"
-                        app:cornerRadius="30dp" />
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/signup_button_final_customer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:text="Registrati"
+                    app:cornerRadius="30dp" />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

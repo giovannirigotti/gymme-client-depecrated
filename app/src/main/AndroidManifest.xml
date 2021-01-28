@@ -30,7 +30,8 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
         </activity>
         <activity android:name=".signup.SignupActivity2"
-            android:windowSoftInputMode="stateVisible|adjustPan">
+            android:windowSoftInputMode="stateVisible|adjustPan"
+            android:theme="@style/AppTheme">
         </activity>
         <activity android:name=".customer.CustomerHomeActivity">
         </activity>
@@ -46,6 +47,10 @@
         <activity android:name=".signup.GymSignupActivity"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
         </activity>
+        <activity android:name=".signup.GymSignupActivity2"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
+        </activity>
+
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
 
