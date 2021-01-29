@@ -146,11 +146,15 @@ public class GymSignupActivity3 extends AppCompatActivity {
         signup_button_final_gym.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkFormat();
-                if (checkFormat()) {
+                Log.e("checkformat",Boolean.toString(checkFormat()));
+
+
+               /* if (checkFormat()) {
                     getHours();
                 }
 
+
+                */
                 new RegisterGymConnection().execute(Integer.toString(user_id), vat_number, gym_name, gym_address, zip_code,
                         pool, boxRing, aerobics, spa, wifi, parkingArea, personalTrainer, nutritionist, impedanceBalance, courses, showers);
             }
@@ -297,21 +301,20 @@ public class GymSignupActivity3 extends AppCompatActivity {
     private boolean checkFormat() {
         boolean result = false;
 
-        if (validateHour(monday_opening_edit_text.getText().toString()) &&
-                validateHour(monday_closing_edit_text.getText().toString()) &&
-                validateHour(tuesday_opening_edit_text.getText().toString()) &&
-                validateHour(tuesday_closing_edit_text.getText().toString()) &&
-                validateHour(wednesday_opening_edit_text.getText().toString()) &&
-                validateHour(wednesday_closing_edit_text.getText().toString()) &&
-                validateHour(thursday_opening_edit_text.getText().toString()) &&
-                validateHour(thursday_closing_edit_text.getText().toString()) &&
-                validateHour(friday_opening_edit_text.getText().toString()) &&
-                validateHour(friday_closing_edit_text.getText().toString()) &&
-                validateHour(saturday_opening_edit_text.getText().toString()) &&
-                validateHour(saturday_closing_edit_text.getText().toString()) &&
-                validateHour(sunday_opening_edit_text.getText().toString()) &&
-                validateHour(sunday_closing_edit_text.getText().toString())
-        ) {
+        if ((validateHour(monday_opening_edit_text.getText().toString()) || monday_opening_edit_text.getText().toString().isEmpty()) &&
+                (validateHour(monday_closing_edit_text.getText().toString()) || monday_closing_edit_text.getText().toString().isEmpty()) &&
+                (validateHour(tuesday_opening_edit_text.getText().toString()) || tuesday_opening_edit_text.getText().toString().isEmpty()) &&
+                (validateHour(tuesday_closing_edit_text.getText().toString()) || tuesday_closing_edit_text.getText().toString().isEmpty()) &&
+                (validateHour(wednesday_opening_edit_text.getText().toString()) || wednesday_opening_edit_text.getText().toString().isEmpty()) &&
+                (validateHour(wednesday_closing_edit_text.getText().toString()) || wednesday_closing_edit_text.getText().toString().isEmpty()) &&
+                (validateHour(thursday_opening_edit_text.getText().toString()) || thursday_opening_edit_text.getText().toString().isEmpty()) &&
+                (validateHour(thursday_closing_edit_text.getText().toString()) || thursday_closing_edit_text.getText().toString().isEmpty()) &&
+                (validateHour(friday_opening_edit_text.getText().toString()) || friday_opening_edit_text.getText().toString().isEmpty()) &&
+                (validateHour(friday_closing_edit_text.getText().toString()) || friday_closing_edit_text.getText().toString().isEmpty()) &&
+                (validateHour(saturday_opening_edit_text.getText().toString()) || saturday_opening_edit_text.getText().toString().isEmpty()) &&
+                (validateHour(saturday_closing_edit_text.getText().toString()) || saturday_closing_edit_text.getText().toString().isEmpty()) &&
+                (validateHour(sunday_opening_edit_text.getText().toString()) || sunday_opening_edit_text.getText().toString().isEmpty()) &&
+                (validateHour(sunday_closing_edit_text.getText().toString()) || sunday_closing_edit_text.getText().toString().isEmpty())) {
             result = true;
         } else {
             if (!validateHour(monday_opening_edit_text.getText().toString())) {
@@ -395,7 +398,7 @@ public class GymSignupActivity3 extends AppCompatActivity {
 
     private boolean validateHour(String hour) {
         String regex = "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$\\n";
-        return hour.matches(regex) || hour.isEmpty();
+        return hour.matches(regex);
     }
 
 }

@@ -57,6 +57,9 @@
         <activity
             android:name=".signup.GymSignupActivity2"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity
+            android:name=".signup.GymSignupActivity3"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
     </application>
 
 </manifest>
