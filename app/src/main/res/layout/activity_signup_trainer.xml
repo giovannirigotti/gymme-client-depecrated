@@ -117,6 +117,13 @@
                         android:minLines="1"
                         android:scrollbars="vertical" />
 
+                    <ProgressBar
+                        android:id="@+id/progressBarSignupTrainer"
+                        style="@style/AppTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone"></ProgressBar>
+
                     <Button
                         android:id="@+id/signup_button_final_trainer"
                         android:layout_width="wrap_content"

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,6 +42,9 @@ public class NutritionistSignupActivity extends AppCompatActivity {
     TextInputEditText _nutritionist_fiscal_code_signup_edit_text;
     @BindView(R.id.signup_button_final_nutritionist)
     Button _signup_button_final_nutritionist;
+
+    @BindView(R.id.progressBarSignupNutritionist)
+    ProgressBar progressBarSignupNutritionist;
 
     int user_id;
     String email;
@@ -101,6 +105,11 @@ public class NutritionistSignupActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
+
+            _signup_button_final_nutritionist.setEnabled(false);
+            _signup_button_final_nutritionist.setVisibility(View.GONE);
+            progressBarSignupNutritionist.setVisibility(View.VISIBLE);
+
         }
 
         @Override
@@ -156,6 +165,10 @@ public class NutritionistSignupActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Integer responseCode) {
             Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_LONG).show();
+            _signup_button_final_nutritionist.setEnabled(true);
+            _signup_button_final_nutritionist.setVisibility(View.VISIBLE);
+            progressBarSignupNutritionist.setVisibility(View.GONE);
+
         }
     }
 }

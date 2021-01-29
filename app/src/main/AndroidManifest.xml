@@ -21,35 +21,36 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".support.NoNetworkActivity">
-        </activity>
-        <activity android:name=".login.LoginActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
-        </activity>
-        <activity android:name=".signup.SignupActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
-        </activity>
-        <activity android:name=".signup.SignupActivity2"
-            android:windowSoftInputMode="stateVisible|adjustPan"
-            android:theme="@style/AppTheme">
-        </activity>
-        <activity android:name=".customer.CustomerHomeActivity">
-        </activity>
-        <activity android:name=".signup.CustomerSignupActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
-        </activity>
-        <activity android:name=".signup.TrainerSignupActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
-        </activity>
-        <activity android:name=".signup.NutritionistSignupActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
-        </activity>
-        <activity android:name=".signup.GymSignupActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
-        </activity>
-        <activity android:name=".signup.GymSignupActivity2"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
-        </activity>
+        <activity android:name=".support.NoNetworkActivity"></activity>
+        <activity
+            android:name=".login.LoginActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"></activity>
+        <activity
+            android:name=".signup.SignupActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"></activity>
+        <activity
+            android:name=".signup.SignupActivity2"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateVisible|adjustPan"></activity>
+        <activity android:name=".customer.CustomerHomeActivity"></activity>
+        <activity
+            android:name=".signup.CustomerSignupActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"></activity>
+        <activity
+            android:name=".signup.TrainerSignupActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"></activity>
+        <activity
+            android:name=".signup.NutritionistSignupActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"></activity>
+        <activity
+            android:name=".signup.GymSignupActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"></activity>
+        <activity
+            android:name=".signup.GymSignupActivity2"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"></activity>
+        <activity
+            android:name=".signup.GymSignupActivity3"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"></activity>
 
     </application>
     <uses-permission android:name="android.permission.INTERNET" />

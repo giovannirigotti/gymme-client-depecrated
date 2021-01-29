@@ -116,7 +116,12 @@
                         android:maxLength="50"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
-
+                <ProgressBar
+                    android:id="@+id/progressBarSignupNutritionist"
+                    style="@style/AppTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"></ProgressBar>
                 <Button
                     android:id="@+id/signup_button_final_nutritionist"
                     android:layout_width="wrap_content"
