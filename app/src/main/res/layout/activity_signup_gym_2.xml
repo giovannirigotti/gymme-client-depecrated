@@ -231,7 +231,7 @@
                         android:textSize="18sp" />
 
                     <Switch
-                        android:id="@+id/switchSignUpNutrizionista"
+                        android:id="@+id/switchSignUpNutritionist"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
@@ -298,8 +298,15 @@
                         android:layout_weight="1" />
                 </LinearLayout>
 
+                <ProgressBar
+                    android:id="@+id/progressBarSignup2Gym"
+                    style="@style/AppTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"></ProgressBar>
+
                 <Button
-                    android:id="@+id/signup_button_next_customer"
+                    android:id="@+id/signup_button_next2_gym"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"

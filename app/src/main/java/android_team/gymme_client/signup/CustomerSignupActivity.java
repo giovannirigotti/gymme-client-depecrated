@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,6 +47,8 @@ public class CustomerSignupActivity extends AppCompatActivity {
     TextInputEditText _customer_diseases_signup_edit_text;
     @BindView(R.id.signup_button_final_customer)
     Button _signup_button_final_customer;
+    @BindView(R.id.progressBarSignupCustomer)
+    ProgressBar progressBarSignupCustomer;
 
     int user_id;
     String email;
@@ -109,6 +112,9 @@ public class CustomerSignupActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
+            _signup_button_final_customer.setEnabled(false);
+            _signup_button_final_customer.setVisibility(View.GONE);
+            progressBarSignupCustomer.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -165,7 +171,9 @@ public class CustomerSignupActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Integer responseCode) {
             Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_LONG).show();
-
+            _signup_button_final_customer.setEnabled(true);
+            _signup_button_final_customer.setVisibility(View.VISIBLE);
+            progressBarSignupCustomer.setVisibility(View.GONE);
         }
     }
 

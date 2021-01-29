@@ -83,8 +83,6 @@ public class SignupActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        checkNetwork();
-
         setContentView(R.layout.activity_signup);
         ButterKnife.bind(this);
 
@@ -225,29 +223,11 @@ public class SignupActivity extends AppCompatActivity {
 
             new CheckUserDataConnection().execute(email);
 
-
-
-
-
-
         }
 
 
     }
 
-    private void checkNetwork() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-
-
-        if (activeNetworkInfo == null) {
-            Intent i = new Intent(getApplicationContext(), NoNetworkActivity.class);
-            startActivity(i);
-            finish();
-        }
-
-    }
 
     private boolean validateMail(String email) {
         String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,6 +44,9 @@ public class TrainerSignupActivity extends AppCompatActivity {
     @BindView(R.id.signup_button_final_trainer)
     Button _signup_button_final_trainer;
 
+    @BindView(R.id.progressBarSignupTrainer)
+    ProgressBar progressBarSignupTrainer;
+
     int user_id;
     String email;
 
@@ -69,6 +73,9 @@ public class TrainerSignupActivity extends AppCompatActivity {
         _signup_button_final_trainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                _signup_button_final_trainer.setEnabled(false);
+                _signup_button_final_trainer.setVisibility(View.GONE);
+                progressBarSignupTrainer.setVisibility(View.VISIBLE);
                 validateFields();
             }
         });

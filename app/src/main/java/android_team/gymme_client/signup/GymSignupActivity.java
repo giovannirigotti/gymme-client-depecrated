@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,6 +49,9 @@ public class GymSignupActivity extends AppCompatActivity {
     TextInputEditText _gym_zip_code_signup_edit_text;
     @BindView(R.id.signup_button_next_gym)
     Button _signup_button_next_gym;
+    @BindView(R.id.signupGymProgressBar)
+    ProgressBar signupGymProgressBar;
+
 
     int user_id;
     String email;
@@ -79,6 +83,9 @@ public class GymSignupActivity extends AppCompatActivity {
         _signup_button_next_gym.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                _signup_button_next_gym.setEnabled(false);
+                _signup_button_next_gym.setVisibility(View.GONE);
+                signupGymProgressBar.setVisibility(View.VISIBLE);
                 validateFields();
             }
         });
@@ -130,6 +137,9 @@ public class GymSignupActivity extends AppCompatActivity {
             i.putExtra("gym_address", address);
             i.putExtra("zip_code", zip);
             startActivity(i);
+            _signup_button_next_gym.setEnabled(true);
+            _signup_button_next_gym.setVisibility(View.VISIBLE);
+            signupGymProgressBar.setVisibility(View.GONE);
         }
     }
 }
