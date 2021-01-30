@@ -149,14 +149,11 @@ public class GymSignupActivity3 extends AppCompatActivity {
                 Log.e("checkformat",Boolean.toString(checkFormat()));
 
 
-               /* if (checkFormat()) {
+                if (checkFormat()) {
                     getHours();
+                    new RegisterGymConnection().execute(Integer.toString(user_id), vat_number, gym_name, gym_address, zip_code,
+                            pool, boxRing, aerobics, spa, wifi, parkingArea, personalTrainer, nutritionist, impedanceBalance, courses, showers);
                 }
-
-
-                */
-                new RegisterGymConnection().execute(Integer.toString(user_id), vat_number, gym_name, gym_address, zip_code,
-                        pool, boxRing, aerobics, spa, wifi, parkingArea, personalTrainer, nutritionist, impedanceBalance, courses, showers);
             }
         });
     }
@@ -317,76 +314,76 @@ public class GymSignupActivity3 extends AppCompatActivity {
                 (validateHour(sunday_closing_edit_text.getText().toString()) || sunday_closing_edit_text.getText().toString().isEmpty())) {
             result = true;
         } else {
-            if (!validateHour(monday_opening_edit_text.getText().toString())) {
+            if (!validateHour(monday_opening_edit_text.getText().toString()) && !monday_opening_edit_text.getText().toString().isEmpty()) {
                 monday_opening_text_input.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
                 monday_opening_text_input.setHint("Formato invalido!");
             }
 
-            if (!validateHour(monday_closing_edit_text.getText().toString())) {
+            if (!validateHour(monday_closing_edit_text.getText().toString())&& !monday_closing_edit_text.getText().toString().isEmpty()) {
                 monday_closing_text_input.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
                 monday_closing_text_input.setHint("Formato invalido!");
             }
-            if (!validateHour(tuesday_opening_edit_text.getText().toString())) {
+            if (!validateHour(tuesday_opening_edit_text.getText().toString()) && !tuesday_opening_edit_text.getText().toString().isEmpty()) {
                 tuesday_opening_text_input.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
                 tuesday_opening_text_input.setHint("Formato invalido!");
             }
-            if (!validateHour(tuesday_closing_edit_text.getText().toString())) {
+            if (!validateHour(tuesday_closing_edit_text.getText().toString()) && !tuesday_closing_edit_text.getText().toString().isEmpty()) {
                 tuesday_closing_text_input.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
                 tuesday_closing_text_input.setHint("Formato invalido!");
             }
-            if (!validateHour(wednesday_opening_edit_text.getText().toString())) {
+            if (!validateHour(wednesday_opening_edit_text.getText().toString()) && !wednesday_opening_edit_text.getText().toString().isEmpty()) {
                 wednesday_opening_text_input.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
                 wednesday_opening_text_input.setHint("Formato invalido!");
             }
-            if (!validateHour(wednesday_closing_edit_text.getText().toString())) {
+            if (!validateHour(wednesday_closing_edit_text.getText().toString()) && !wednesday_closing_edit_text.getText().toString().isEmpty()) {
                 wednesday_closing_text_input.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
                 wednesday_closing_text_input.setHint("Formato invalido!");
             }
-            if (!validateHour(tuesday_opening_edit_text.getText().toString())) {
+            if (!validateHour(tuesday_opening_edit_text.getText().toString()) && !tuesday_opening_edit_text.getText().toString().isEmpty()) {
                 tuesday_opening_text_input.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
                 tuesday_opening_text_input.setHint("Formato invalido!");
             }
-            if (!validateHour(tuesday_closing_edit_text.getText().toString())) {
+            if (!validateHour(tuesday_closing_edit_text.getText().toString()) && !tuesday_closing_edit_text.getText().toString().isEmpty()) {
                 tuesday_closing_text_input.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
                 tuesday_closing_text_input.setHint("Formato invalido!");
             }
-            if (!validateHour(wednesday_opening_edit_text.getText().toString())) {
+            if (!validateHour(wednesday_opening_edit_text.getText().toString()) && !wednesday_opening_edit_text.getText().toString().isEmpty()) {
                 wednesday_opening_text_input.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
                 wednesday_opening_text_input.setHint("Formato invalido!");
             }
-            if (!validateHour(wednesday_closing_edit_text.getText().toString())) {
+            if (!validateHour(wednesday_closing_edit_text.getText().toString()) && !wednesday_closing_edit_text.getText().toString().isEmpty()) {
                 wednesday_closing_text_input.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
                 wednesday_closing_text_input.setHint("Formato invalido!");
             }
-            if (!validateHour(thursday_opening_edit_text.getText().toString())) {
+            if (!validateHour(thursday_opening_edit_text.getText().toString()) && !thursday_opening_edit_text.getText().toString().isEmpty()) {
                 thursday_opening_text_input.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
                 thursday_opening_text_input.setHint("Formato invalido!");
             }
-            if (!validateHour(thursday_closing_edit_text.getText().toString())) {
+            if (!validateHour(thursday_closing_edit_text.getText().toString()) && !thursday_closing_edit_text.getText().toString().isEmpty()) {
                 thursday_closing_text_input.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
                 thursday_closing_text_input.setHint("Formato invalido!");
             }
-            if (!validateHour(friday_opening_edit_text.getText().toString())) {
+            if (!validateHour(friday_opening_edit_text.getText().toString()) && !friday_opening_edit_text.getText().toString().isEmpty()) {
                 friday_opening_text_input.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
                 friday_opening_text_input.setHint("Formato invalido!");
             }
-            if (!validateHour(friday_closing_edit_text.getText().toString())) {
+            if (!validateHour(friday_closing_edit_text.getText().toString()) && !friday_closing_edit_text.getText().toString().isEmpty()) {
                 friday_closing_text_input.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
                 friday_closing_text_input.setHint("Formato invalido!");
             }
-            if (!validateHour(saturday_opening_edit_text.getText().toString())) {
+            if (!validateHour(saturday_opening_edit_text.getText().toString()) && !saturday_opening_edit_text.getText().toString().isEmpty()) {
                 saturday_opening_text_input.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
                 saturday_opening_text_input.setHint("Formato invalido!");
             }
-            if (!validateHour(saturday_closing_edit_text.getText().toString())) {
+            if (!validateHour(saturday_closing_edit_text.getText().toString()) && !saturday_closing_edit_text.getText().toString().isEmpty()) {
                 saturday_closing_text_input.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
                 saturday_closing_text_input.setHint("Formato invalido!");
             }
-            if (!validateHour(sunday_opening_edit_text.getText().toString())) {
+            if (!validateHour(sunday_opening_edit_text.getText().toString()) && !sunday_opening_edit_text.getText().toString().isEmpty()) {
                 sunday_opening_text_input.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
                 sunday_opening_text_input.setHint("Formato invalido!");
             }
-            if (!validateHour(sunday_closing_edit_text.getText().toString())) {
+            if (!validateHour(sunday_closing_edit_text.getText().toString()) && !sunday_closing_edit_text.getText().toString().isEmpty()) {
                 sunday_closing_text_input.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
                 sunday_closing_text_input.setHint("Formato invalido!");
             }
@@ -396,9 +393,17 @@ public class GymSignupActivity3 extends AppCompatActivity {
         return result;
     }
 
-    private boolean validateHour(String hour) {
-        String regex = "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$\\n";
-        return hour.matches(regex);
+    private boolean validateHour(String time) {
+        String regex = "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$";
+
+        if(!time.isEmpty()) {
+            int hours = Integer.parseInt(time.substring(0, 2));
+            int minutes = Integer.parseInt(time.substring(3, 5));
+
+         Log.e("res", Boolean.toString( time.matches(regex)));
+            return time.matches(regex) && 0<=hours && hours <= 23 && 0<= minutes && minutes <=59;
+
+        } else return true;
     }
 
 }
