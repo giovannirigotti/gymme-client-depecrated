@@ -1,10 +1,12 @@
 package android_team.gymme_client.customer;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,10 +27,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import android_team.gymme_client.R;
+import android_team.gymme_client.login.LoginActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class CustomerHomeActivity extends AppCompatActivity {
+
+    private int user_id;
 
 
     @BindView(R.id.send_notification_button)
@@ -36,13 +41,29 @@ public class CustomerHomeActivity extends AppCompatActivity {
     @BindView(R.id.control_notification_button)
     Button _control_notification_button;
 
+    @BindView(R.id.btn_customer_home_profile)
+    Button _btn_customer_home_profile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_customer_home);
-
         ButterKnife.bind(this);
+        
+        Intent i = getIntent();
+        if (!i.hasExtra("user_id")) {
+            Toast.makeText(this, "User_id mancante", Toast.LENGTH_LONG).show();
+            Intent new_i = new Intent(this, LoginActivity.class);
+            startActivity(new_i);
+        } else {
+            user_id = i.getIntExtra("user_id", -1);
+            Log.w("user_id ricevuto:", String.valueOf(user_id));
+            if (user_id == -1) {
+                Toast.makeText(this, "Utente non creato.", Toast.LENGTH_LONG).show();
+                Intent new_i = new Intent(this, LoginActivity.class);
+                startActivity(new_i);
+            }
+        }
         _send_notification_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,8 +74,6 @@ public class CustomerHomeActivity extends AppCompatActivity {
                 }
             }
         });
-
-
         _control_notification_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,6 +85,18 @@ public class CustomerHomeActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+        _btn_customer_home_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("REDIRECT", "Customer Profile Activity");
+                Intent i = new Intent(getApplicationContext(), CustomerProfileActivity.class);
+                i.putExtra("user_id", user_id);
+                startActivity(i);
+            }
+        });
+
     }
 
 
@@ -150,7 +181,7 @@ public class CustomerHomeActivity extends AppCompatActivity {
 
     }
 
-    private class ReciveNotification extends AsyncTask<String, String, JsonArray>{
+    private class ReciveNotification extends AsyncTask<String, String, JsonArray> {
 
         String toastMessage = null;
 
@@ -170,7 +201,6 @@ public class CustomerHomeActivity extends AppCompatActivity {
                 urlConnection.connect();
                 int responseCode = urlConnection.getResponseCode();
                 urlConnection.disconnect();
-
 
 
                 if (responseCode == HttpURLConnection.HTTP_OK) {

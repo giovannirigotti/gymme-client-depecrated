@@ -217,6 +217,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     if (type == 0) {
                         Intent i = new Intent(getApplicationContext(), CustomerHomeActivity.class);
+                        i.putExtra("user_id", id);
                         startActivity(i);
                         finish();
                     } else if (type == 1) {
