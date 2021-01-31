@@ -271,8 +271,7 @@ public class SignupActivity2 extends AppCompatActivity {
     }
 
 
-    private class CustomDialogClass extends Dialog implements
-            android.view.View.OnClickListener {
+    private class CustomDialogClass extends Dialog implements android.view.View.OnClickListener {
 
         public Activity c;
         public Dialog d;
