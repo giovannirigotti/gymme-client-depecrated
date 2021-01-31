@@ -328,7 +328,13 @@ public class CustomerProfileActivity extends AppCompatActivity {
 
                             @Override
                             public void processFinish(Integer output) {
-                                if (output == 200) {
+                                if (output == 403) {
+                                    runOnUiThread(new Runnable() {
+                                        public void run() {
+                                            Toast.makeText(CustomerProfileActivity.this, "Email già usata. FORBIDDEN", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                } else if (output == 200) {
                                     runOnUiThread(new Runnable() {
                                         public void run() {
                                             Toast.makeText(CustomerProfileActivity.this, "SUCCESS, email aggiornata", Toast.LENGTH_SHORT).show();
@@ -443,6 +449,11 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     Log.e("EMAIL", "CAMBIATA SUL DB");
                     responseCode = 200;
                     delegate.processFinish(responseCode);
+                } else if (responseCode == HttpURLConnection.HTTP_FORBIDDEN) {
+                    Log.e("EMAIL", "Error 403!");
+                    responseCode = 403;
+                    delegate.processFinish(responseCode);
+                    urlConnection.disconnect();
                 } else {
                     Log.e("EMAIL", "Error");
                     responseCode = 500;
