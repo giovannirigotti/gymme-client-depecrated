@@ -120,6 +120,22 @@ public class CustomerProfileActivity extends AppCompatActivity {
             }
         });
 
+        //Update diseases menegment
+        _btn_customer_profile_disturbi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChangeDiseases(CustomerProfileActivity.this, user_id);
+            }
+        });
+
+        //Update email menegment
+        _btn_customer_profile_allergie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //ChangeEmail(CustomerProfileActivity.this, user_id);
+            }
+        });
+
     }
 
     //GET DATA CLASSES
@@ -356,10 +372,10 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 res = false;
                 Log.e("EMAIL", "Campi vuoti");
             } else {
-                if(!validateMail(n_e)){
+                if (!validateMail(n_e)) {
                     res = false;
                     Log.e("EMAIL", "Email non valida.");
-                }else{
+                } else {
                     if (!n_e.equals(c_e)) {
                         res = false;
                         Log.e("EMAIL", "Email non uguali");
@@ -429,6 +445,148 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     delegate.processFinish(responseCode);
                 } else {
                     Log.e("EMAIL", "Error");
+                    responseCode = 500;
+                    delegate.processFinish(responseCode);
+                    urlConnection.disconnect();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                responseCode = 69;
+                delegate.processFinish(responseCode);
+            } finally {
+                if (urlConnection != null)
+                    urlConnection.disconnect();
+            }
+            return responseCode;
+        }
+    }
+
+    //DISTURBI
+    private void ChangeDiseases(Activity a, int user_id) {
+        CustomerProfileActivity.CustomDialogDiseasesClass cdd = new CustomerProfileActivity.CustomDialogDiseasesClass(a, user_id);
+        cdd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        cdd.show();
+    }
+
+    private class CustomDialogDiseasesClass extends Dialog implements android.view.View.OnClickListener {
+
+        public Activity c;
+        public Button Aggiorna, Esci;
+        public EditText diseases;
+        public Integer user_id;
+
+        public CustomDialogDiseasesClass(Activity a, Integer user_id) {
+            super(a);
+            this.c = a;
+            this.user_id = user_id;
+        }
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            setContentView(R.layout.dialog_update_diseases);
+            Aggiorna = (Button) findViewById(R.id.dialog_confirm_user_type_yes);
+            Esci = (Button) findViewById(R.id.dialog_confirm_user_type_no);
+            diseases = (EditText) findViewById(R.id.et_dialog_diseases);
+            diseases.setText(_tv_customer_profile_disturbi.getText().toString());
+
+            Aggiorna.setOnClickListener(this);
+            Esci.setOnClickListener(this);
+        }
+
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.dialog_confirm_user_type_yes:
+                    UpdateDiseasesConnection asyncTask = (UpdateDiseasesConnection) new UpdateDiseasesConnection(new UpdateDiseasesConnection.AsyncResponse() {
+
+                        @Override
+                        public void processFinish(Integer output) {
+                            if (output == 200) {
+                                runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        Toast.makeText(CustomerProfileActivity.this, "SUCCESS, disturbi aggiornati", Toast.LENGTH_SHORT).show();
+                                        _tv_customer_profile_disturbi.setText(diseases.getText().toString());
+                                    }
+                                });
+                                dismiss();
+                            } else {
+                                runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        Toast.makeText(CustomerProfileActivity.this, "ERRORE, server side", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        }
+
+                    }).execute(String.valueOf(user_id), diseases.getText().toString());
+
+
+                    //
+
+                    break;
+                case R.id.dialog_confirm_user_type_no:
+                    //
+                    dismiss();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    public static class UpdateDiseasesConnection extends AsyncTask<String, String, Integer> {
+
+        // you may separate this or combined to caller class.
+        public interface AsyncResponse {
+            void processFinish(Integer output);
+        }
+
+        public AsyncResponse delegate = null;
+
+        public UpdateDiseasesConnection(AsyncResponse delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            URL url;
+            HttpURLConnection urlConnection = null;
+            JsonObject user = null;
+            int responseCode = 500;
+            try {
+                url = new URL("http://10.0.2.2:4000/customer/update_diseases");
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setConnectTimeout(5000);
+                urlConnection.setRequestProperty("Content-Type", "application/json");
+
+                JsonObject paramsJson = new JsonObject();
+
+                paramsJson.addProperty("user_id", params[0]);
+                paramsJson.addProperty("diseases", params[1]);
+
+                urlConnection.setDoOutput(true);
+
+                OutputStream os = urlConnection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, "UTF-8"));
+                writer.write(paramsJson.toString());
+                writer.flush();
+                writer.close();
+                os.close();
+
+                urlConnection.connect();
+                responseCode = urlConnection.getResponseCode();
+
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    Log.e("DISTURBI", "CAMBIATI SUL DB");
+                    responseCode = 200;
+                    delegate.processFinish(responseCode);
+                } else {
+                    Log.e("DISTURBI", "Error");
                     responseCode = 500;
                     delegate.processFinish(responseCode);
                     urlConnection.disconnect();
@@ -541,10 +699,10 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 res = false;
                 Log.e("PASSWORD", "Campi vuoti");
             } else {
-                if(!validatePassword(n_p)){
+                if (!validatePassword(n_p)) {
                     res = false;
                     Log.e("PASSWORD", "Password non valida.");
-                }else{
+                } else {
                     if (!n_p.equals(c_p)) {
                         res = false;
                         Log.e("PASSWORD", "Password non uguali");

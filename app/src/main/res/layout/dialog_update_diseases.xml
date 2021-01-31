@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
 
         android:layout_gravity="center_vertical"
-        android:text="Confermi di voler aggiornare la email?"
+        android:text="Modifica i disturbi e premi aggiorna altrimenti premi esci."
         android:textAlignment="viewStart"
         android:textSize="20sp" />
 
@@ -20,27 +20,16 @@
         android:id="@+id/dialog_confirm_user_type_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nuova Email"
+        android:text="Aggiorna disturbi"
         android:textAlignment="center"
         android:textSize="20sp"
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/et_dialog_nuova_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:id="@+id/et_dialog_diseases"
+        android:layout_width="match_parent"
+        android:layout_height="143dp"
         android:ems="10"
-        android:hint="Nuova email"
-        android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/et_dialog_conferma_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:ems="10"
-        android:hint="Conferma email..."
         android:inputType="textPersonName" />
 
     <LinearLayout
