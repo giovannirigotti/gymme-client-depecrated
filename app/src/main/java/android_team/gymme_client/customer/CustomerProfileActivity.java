@@ -132,7 +132,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
         _btn_customer_profile_allergie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //ChangeEmail(CustomerProfileActivity.this, user_id);
+                ChangeAllergies(CustomerProfileActivity.this, user_id);
             }
         });
 
@@ -587,6 +587,148 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     delegate.processFinish(responseCode);
                 } else {
                     Log.e("DISTURBI", "Error");
+                    responseCode = 500;
+                    delegate.processFinish(responseCode);
+                    urlConnection.disconnect();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                responseCode = 69;
+                delegate.processFinish(responseCode);
+            } finally {
+                if (urlConnection != null)
+                    urlConnection.disconnect();
+            }
+            return responseCode;
+        }
+    }
+
+    //ALLERGIE
+    private void ChangeAllergies(Activity a, int user_id) {
+        CustomerProfileActivity.CustomDialogAllergiesClass cdd = new CustomerProfileActivity.CustomDialogAllergiesClass(a, user_id);
+        cdd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        cdd.show();
+    }
+
+    private class CustomDialogAllergiesClass extends Dialog implements android.view.View.OnClickListener {
+
+        public Activity c;
+        public Button Aggiorna, Esci;
+        public EditText allergies;
+        public Integer user_id;
+
+        public CustomDialogAllergiesClass(Activity a, Integer user_id) {
+            super(a);
+            this.c = a;
+            this.user_id = user_id;
+        }
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            setContentView(R.layout.dialog_update_allergies);
+            Aggiorna = (Button) findViewById(R.id.dialog_confirm_user_type_yes);
+            Esci = (Button) findViewById(R.id.dialog_confirm_user_type_no);
+            allergies = (EditText) findViewById(R.id.et_dialog_allergies);
+            allergies.setText(_tv_customer_profile_allergie.getText().toString());
+
+            Aggiorna.setOnClickListener(this);
+            Esci.setOnClickListener(this);
+        }
+
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.dialog_confirm_user_type_yes:
+                    UpdateAllergiesConnection asyncTask = (UpdateAllergiesConnection) new UpdateAllergiesConnection(new UpdateAllergiesConnection.AsyncResponse() {
+
+                        @Override
+                        public void processFinish(Integer output) {
+                            if (output == 200) {
+                                runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        Toast.makeText(CustomerProfileActivity.this, "SUCCESS, allergie aggiornate", Toast.LENGTH_SHORT).show();
+                                        _tv_customer_profile_allergie.setText(allergies.getText().toString());
+                                    }
+                                });
+                                dismiss();
+                            } else {
+                                runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        Toast.makeText(CustomerProfileActivity.this, "ERRORE, server side", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        }
+
+                    }).execute(String.valueOf(user_id), allergies.getText().toString());
+
+
+                    //
+
+                    break;
+                case R.id.dialog_confirm_user_type_no:
+                    //
+                    dismiss();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    public static class UpdateAllergiesConnection extends AsyncTask<String, String, Integer> {
+
+        // you may separate this or combined to caller class.
+        public interface AsyncResponse {
+            void processFinish(Integer output);
+        }
+
+        public AsyncResponse delegate = null;
+
+        public UpdateAllergiesConnection(AsyncResponse delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            URL url;
+            HttpURLConnection urlConnection = null;
+            JsonObject user = null;
+            int responseCode = 500;
+            try {
+                url = new URL("http://10.0.2.2:4000/customer/update_allergies");
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setConnectTimeout(5000);
+                urlConnection.setRequestProperty("Content-Type", "application/json");
+
+                JsonObject paramsJson = new JsonObject();
+
+                paramsJson.addProperty("user_id", params[0]);
+                paramsJson.addProperty("allergies", params[1]);
+
+                urlConnection.setDoOutput(true);
+
+                OutputStream os = urlConnection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, "UTF-8"));
+                writer.write(paramsJson.toString());
+                writer.flush();
+                writer.close();
+                os.close();
+
+                urlConnection.connect();
+                responseCode = urlConnection.getResponseCode();
+
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    Log.e("ALLERGIE", "CAMBIATE SUL DB");
+                    responseCode = 200;
+                    delegate.processFinish(responseCode);
+                } else {
+                    Log.e("ALLERGIE", "Error");
                     responseCode = 500;
                     delegate.processFinish(responseCode);
                     urlConnection.disconnect();
