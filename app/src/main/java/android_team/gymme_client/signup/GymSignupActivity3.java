@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.io.BufferedWriter;
@@ -24,6 +25,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 
 import android_team.gymme_client.R;
 import android_team.gymme_client.login.LoginActivity;
@@ -103,21 +105,23 @@ public class GymSignupActivity3 extends AppCompatActivity {
     String gym_address;
     String zip_code;
 
+    int opening_monday = -1;
+    int closing_monday = -1;
+    int opening_tuesday = -1;
+    int closing_tuesday = -1;
+    int opening_wednesday = -1;
+    int closing_wednesday = -1;
+    int opening_thursday = -1;
+    int closing_thursday = -1;
+    int opening_friday = -1;
+    int closing_friday = -1;
+    int opening_saturday = -1;
+    int closing_saturday = -1;
+    int opening_sunday = -1;
+    int closing_sunday = -1;
 
-    int opening_monday;
-    int closing_monday;
-    int opening_tuesday;
-    int closing_tuesday;
-    int opening_wednesday;
-    int closing_wednesday;
-    int opening_thursday;
-    int closing_thursday;
-    int opening_friday;
-    int closing_friday;
-    int opening_saturday;
-    int closing_saturday;
-    int opening_sunday;
-    int closing_sunday;
+
+    int[] hours = new int[14];
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,19 +150,32 @@ public class GymSignupActivity3 extends AppCompatActivity {
         signup_button_final_gym.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("checkformat",Boolean.toString(checkFormat()));
-
+                Log.e("checkformat", Boolean.toString(checkFormat()));
 
                 if (checkFormat()) {
                     getHours();
-                    new RegisterGymConnection().execute(Integer.toString(user_id), vat_number, gym_name, gym_address, zip_code,
-                            pool, boxRing, aerobics, spa, wifi, parkingArea, personalTrainer, nutritionist, impedanceBalance, courses, showers);
+                    new RegisterGymDataConnection().execute(Integer.toString(user_id), vat_number, gym_name, gym_address, zip_code,
+                            pool, boxRing, aerobics, spa, wifi, parkingArea, personalTrainer, nutritionist, impedanceBalance, courses, showers, Integer.toString(opening_monday),
+                            Integer.toString(closing_monday),
+                            Integer.toString(opening_tuesday),
+                            Integer.toString(closing_tuesday),
+                            Integer.toString(opening_wednesday),
+                            Integer.toString(closing_wednesday),
+                            Integer.toString(opening_thursday),
+                            Integer.toString(closing_thursday),
+                            Integer.toString(opening_friday),
+                            Integer.toString(closing_friday),
+                            Integer.toString(opening_saturday),
+                            Integer.toString(closing_saturday),
+                            Integer.toString(opening_sunday),
+                            Integer.toString(closing_sunday)
+                    );
                 }
             }
         });
     }
 
-    private class RegisterGymConnection extends AsyncTask<String, String, Integer> {
+    private class RegisterGymDataConnection extends AsyncTask<String, String, Integer> {
         String toastMessage = null;
 
         @Override
@@ -197,6 +214,20 @@ public class GymSignupActivity3 extends AppCompatActivity {
                 paramsJson.addProperty("impedance_balance", params[13]);
                 paramsJson.addProperty("courses", params[14]);
                 paramsJson.addProperty("showers", params[15]);
+                paramsJson.addProperty("opening_monday", params[16]);
+                paramsJson.addProperty("closing_monday", params[17]);
+                paramsJson.addProperty("opening_tuesday", params[18]);
+                paramsJson.addProperty("closing_tuesday", params[19]);
+                paramsJson.addProperty("opening_wednesday", params[20]);
+                paramsJson.addProperty("closing_wednesday", params[21]);
+                paramsJson.addProperty("opening_thursday", params[22]);
+                paramsJson.addProperty("closing_thursday", params[23]);
+                paramsJson.addProperty("opening_friday", params[24]);
+                paramsJson.addProperty("closing_friday", params[25]);
+                paramsJson.addProperty("opening_saturday", params[26]);
+                paramsJson.addProperty("closing_saturday", params[27]);
+                paramsJson.addProperty("opening_sunday", params[28]);
+                paramsJson.addProperty("closing_sunday", params[29]);
 
 
                 urlConnection.setDoOutput(true);
@@ -244,48 +275,65 @@ public class GymSignupActivity3 extends AppCompatActivity {
     }
 
     private void getHours() {
-        if (!monday_opening_edit_text.getText().toString().isEmpty()) {
-            opening_monday = toMins(monday_opening_edit_text.getText().toString());
-        }
-        if (!monday_closing_edit_text.getText().toString().isEmpty()) {
-            closing_monday = toMins(monday_closing_edit_text.getText().toString());
-        }
-        if (!tuesday_opening_edit_text.getText().toString().isEmpty()) {
-            opening_tuesday = toMins(tuesday_opening_edit_text.getText().toString());
-        }
-        if (!tuesday_closing_edit_text.getText().toString().isEmpty()) {
-            closing_tuesday = toMins(tuesday_closing_edit_text.getText().toString());
-        }
-        if (!wednesday_opening_edit_text.getText().toString().isEmpty()) {
-            opening_wednesday = toMins(wednesday_opening_edit_text.getText().toString());
-        }
-        if (!wednesday_closing_edit_text.getText().toString().isEmpty()) {
-            closing_wednesday = toMins(wednesday_closing_edit_text.getText().toString());
-        }
-        if (!thursday_opening_edit_text.getText().toString().isEmpty()) {
-            opening_thursday = toMins(thursday_opening_edit_text.getText().toString());
-        }
-        if (!thursday_closing_edit_text.getText().toString().isEmpty()) {
-            closing_thursday = toMins(thursday_closing_edit_text.getText().toString());
-        }
-        if (!friday_opening_edit_text.getText().toString().isEmpty()) {
-            opening_friday = toMins(friday_opening_edit_text.getText().toString());
-        }
-        if (!friday_closing_edit_text.getText().toString().isEmpty()) {
-            closing_friday = toMins(friday_closing_edit_text.getText().toString());
-        }
-        if (!saturday_opening_edit_text.getText().toString().isEmpty()) {
-            opening_saturday = toMins(saturday_opening_edit_text.getText().toString());
-        }
-        if (!saturday_closing_edit_text.getText().toString().isEmpty()) {
-            closing_saturday = toMins(saturday_closing_edit_text.getText().toString());
-        }
-        if (!sunday_opening_edit_text.getText().toString().isEmpty()) {
-            opening_sunday = toMins(sunday_opening_edit_text.getText().toString());
-        }
-        if (!sunday_closing_edit_text.getText().toString().isEmpty()) {
-            closing_sunday = toMins(sunday_closing_edit_text.getText().toString());
-        }
+        if (!monday_opening_edit_text.getText().toString().trim().isEmpty()) {
+            opening_monday = toMins(monday_opening_edit_text.getText().toString().trim());
+        } else opening_monday = -1;
+        if (!monday_closing_edit_text.getText().toString().trim().isEmpty()) {
+            closing_monday = toMins(monday_closing_edit_text.getText().toString().trim());
+        } else closing_monday = -1;
+        if (!tuesday_opening_edit_text.getText().toString().trim().isEmpty()) {
+            opening_tuesday = toMins(tuesday_opening_edit_text.getText().toString().trim());
+        } else opening_tuesday = -1;
+        if (!tuesday_closing_edit_text.getText().toString().trim().isEmpty()) {
+            closing_tuesday = toMins(tuesday_closing_edit_text.getText().toString().trim());
+        } else closing_tuesday = -1;
+        if (!wednesday_opening_edit_text.getText().toString().trim().isEmpty()) {
+            opening_wednesday = toMins(wednesday_opening_edit_text.getText().toString().trim());
+        } else opening_wednesday = -1;
+        if (!wednesday_closing_edit_text.getText().toString().trim().isEmpty()) {
+            closing_wednesday = toMins(wednesday_closing_edit_text.getText().toString().trim());
+        } else closing_wednesday = -1;
+        if (!thursday_opening_edit_text.getText().toString().trim().isEmpty()) {
+            opening_thursday = toMins(thursday_opening_edit_text.getText().toString().trim());
+        } else opening_thursday = -1;
+        if (!thursday_closing_edit_text.getText().toString().trim().isEmpty()) {
+            closing_thursday = toMins(thursday_closing_edit_text.getText().toString().trim());
+        } else closing_thursday = -1;
+        if (!friday_opening_edit_text.getText().toString().trim().isEmpty()) {
+            opening_friday = toMins(friday_opening_edit_text.getText().toString().trim());
+        } else opening_friday = -1;
+        if (!friday_closing_edit_text.getText().toString().trim().isEmpty()) {
+            closing_friday = toMins(friday_closing_edit_text.getText().toString().trim());
+        } else closing_friday = -1;
+        if (!saturday_opening_edit_text.getText().toString().trim().isEmpty()) {
+            opening_saturday = toMins(saturday_opening_edit_text.getText().toString().trim());
+        } else opening_saturday = -1;
+        if (!saturday_closing_edit_text.getText().toString().trim().isEmpty()) {
+            closing_saturday = toMins(saturday_closing_edit_text.getText().toString().trim());
+        } else closing_saturday = -1;
+        if (!sunday_opening_edit_text.getText().toString().trim().isEmpty()) {
+            opening_sunday = toMins(sunday_opening_edit_text.getText().toString().trim());
+        } else opening_sunday = -1;
+        if (!sunday_closing_edit_text.getText().toString().trim().isEmpty()) {
+            closing_sunday = toMins(sunday_closing_edit_text.getText().toString().trim());
+        } else closing_sunday = -1;
+
+        hours[0] = opening_monday;
+        hours[1] = closing_monday;
+        hours[2] = opening_tuesday;
+        hours[3] = closing_tuesday;
+        hours[4] = opening_wednesday;
+        hours[5] = closing_wednesday;
+        hours[6] = opening_thursday;
+        hours[7] = closing_thursday;
+        hours[8] = opening_friday;
+        hours[9] = closing_friday;
+        hours[10] = opening_saturday;
+        hours[11] = closing_saturday;
+        hours[12] = opening_sunday;
+        hours[13] = closing_sunday;
+
+
     }
 
     private int toMins(String s) {
@@ -293,7 +341,6 @@ public class GymSignupActivity3 extends AppCompatActivity {
         int minutes = Integer.parseInt(s.substring(0, 1)) % 60 + Integer.parseInt(s.substring(3, 4));
         return minutes;
     }
-
 
     private boolean checkFormat() {
         boolean result = false;
@@ -319,7 +366,7 @@ public class GymSignupActivity3 extends AppCompatActivity {
                 monday_opening_text_input.setHint("Formato invalido!");
             }
 
-            if (!validateHour(monday_closing_edit_text.getText().toString())&& !monday_closing_edit_text.getText().toString().isEmpty()) {
+            if (!validateHour(monday_closing_edit_text.getText().toString()) && !monday_closing_edit_text.getText().toString().isEmpty()) {
                 monday_closing_text_input.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
                 monday_closing_text_input.setHint("Formato invalido!");
             }
@@ -396,12 +443,12 @@ public class GymSignupActivity3 extends AppCompatActivity {
     private boolean validateHour(String time) {
         String regex = "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$";
 
-        if(!time.isEmpty()) {
+        if (!time.isEmpty()) {
             int hours = Integer.parseInt(time.substring(0, 2));
             int minutes = Integer.parseInt(time.substring(3, 5));
 
-         Log.e("res", Boolean.toString( time.matches(regex)));
-            return time.matches(regex) && 0<=hours && hours <= 23 && 0<= minutes && minutes <=59;
+            Log.e("res", Boolean.toString(time.matches(regex)));
+            return time.matches(regex) && 0 <= hours && hours <= 23 && 0 <= minutes && minutes <= 59;
 
         } else return true;
     }

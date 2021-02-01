@@ -15,12 +15,14 @@ import android_team.gymme_client.local_database.local_dbmanager.DBManagerStatus;
 import android_team.gymme_client.local_database.local_dbmanager.DBManagerUser;
 import android_team.gymme_client.login.LoginActivity;
 import android_team.gymme_client.support.NoNetworkActivity;
+import android_team.gymme_client.support.UserInfo;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private DBManagerStatus dbManagerStatus = null;
     private DBManagerUser dbManagerUser = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,12 @@ public class MainActivity extends AppCompatActivity {
         if (status == 1) {
             Cursor userCursor = dbManagerUser.fetch();
             int type = userCursor.getInt(userCursor.getColumnIndex("type"));
+            int user_id = userCursor.getInt(userCursor.getColumnIndex("id"));
+
+            UserInfo.setUser_id(user_id);
+            UserInfo.setUser_type(type);
+
+
             Log.e("Type", Integer.toString(type));
             dbManagerUser.close();
             dbManagerStatus.close();
@@ -71,7 +79,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-
 }
 

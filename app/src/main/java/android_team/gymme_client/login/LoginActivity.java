@@ -37,6 +37,7 @@ import android_team.gymme_client.customer.CustomerHomeActivity;
 import android_team.gymme_client.local_database.local_dbmanager.DBManagerStatus;
 import android_team.gymme_client.local_database.local_dbmanager.DBManagerUser;
 import android_team.gymme_client.signup.SignupActivity;
+import android_team.gymme_client.support.UserInfo;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -211,6 +212,9 @@ public class LoginActivity extends AppCompatActivity {
 
                     dbManagerUser.insert(id, name, lastname, email, birthdate, type);
                     Log.e("User", "User updated");
+
+                    UserInfo.setUser_type(type);
+                    UserInfo.setUser_id(id);
 
                     dbManagerStatus.close();
                     dbManagerUser.close();
