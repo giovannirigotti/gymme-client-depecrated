@@ -141,6 +141,8 @@
         private void GetDataSetView(int user_id) {
             //User Data
             new TrainerProfileActivity.GetUserDataConnection().execute(String.valueOf(user_id));
+            //Trainer Data
+            new TrainerProfileActivity.GetTrainerDataConnection().execute(String.valueOf(user_id));
         }
 
         private class GetUserDataConnection extends AsyncTask<String, String, JsonObject> {
@@ -211,6 +213,69 @@
             }
         }
 
+        private class GetTrainerDataConnection extends AsyncTask<String, String, JsonObject> {
+
+            @Override
+            protected JsonObject doInBackground(String... params) {
+                URL url;
+                HttpURLConnection urlConnection = null;
+                JsonObject user = null;
+
+                try {
+                    url = new URL("http://10.0.2.2:4000/trainer/get_all_data/" + params[0]);
+                    urlConnection = (HttpURLConnection) url.openConnection();
+                    urlConnection.setRequestMethod("GET");
+                    urlConnection.setConnectTimeout(5000);
+                    urlConnection.connect();
+                    int responseCode = urlConnection.getResponseCode();
+                    urlConnection.disconnect();
+
+                    if (responseCode == HttpURLConnection.HTTP_OK) {
+                        Log.e("Server response", "HTTP_OK");
+                        String responseString = readStream(urlConnection.getInputStream());
+                        Log.e("Server customer", responseString);
+                        user = JsonParser.parseString(responseString).getAsJsonObject();
+                        qualifica = user.get("qualification").getAsString();
+                        codice_fiscale = user.get("fiscal_code").getAsString();
+                        _tv_trainer_profile_qualifica.setText(qualifica);
+                        _tv_trainer_profile_codice_fiscale.setText(codice_fiscale);
+
+                    } else if (responseCode == HttpURLConnection.HTTP_NOT_FOUND) {
+                        Log.e("Server response", "HTTP_NOT_FOUND");
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (urlConnection != null)
+                        urlConnection.disconnect();
+                }
+                return user;
+            }
+            private String readStream(InputStream in) throws UnsupportedEncodingException {
+                BufferedReader reader = null;
+                StringBuffer response = new StringBuffer();
+                try {
+                    reader = new BufferedReader(new InputStreamReader(in));
+                    String line = "";
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (reader != null) {
+                        try {
+                            reader.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                return response.toString();
+            }
+
+        }
 
         //LOGOUT
         private void DoLogout() {
