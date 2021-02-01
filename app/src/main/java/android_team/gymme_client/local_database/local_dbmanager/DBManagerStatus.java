@@ -13,6 +13,8 @@ public class DBManagerStatus {
     private DBHelper dbHelper;
     private Context context;
     private SQLiteDatabase database;
+    public final Integer STATUS_LOGGED = 1;
+    public final Integer STATUS_NOT_LOGGED = 0;
 
     public DBManagerStatus(Context c) {
         context = c;

@@ -1,10 +1,11 @@
-package android_team.gymme_client.customer;
+    package android_team.gymme_client.customer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -32,8 +33,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import android_team.gymme_client.R;
+import android_team.gymme_client.local_database.local_dbmanager.DBManagerStatus;
 import android_team.gymme_client.local_database.local_dbmanager.DBManagerUser;
 import android_team.gymme_client.login.LoginActivity;
+import android_team.gymme_client.signup.SignupActivity;
+import android_team.gymme_client.support.Utili;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -136,6 +140,26 @@ public class CustomerProfileActivity extends AppCompatActivity {
             }
         });
 
+        //Update email menegment
+        _btn_customer_profile_logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DoLogout();
+            }
+        });
+
+
+    }
+
+
+
+    //LOGOUT
+    private void DoLogout() {
+        Utili.logout(CustomerProfileActivity.this);
+        Intent intent = new Intent(CustomerProfileActivity.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 
     //GET DATA CLASSES

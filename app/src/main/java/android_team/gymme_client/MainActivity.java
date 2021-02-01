@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         // NON-LOGGATO = 0;
         Log.e("Status", Integer.toString(status));
 
-        if (status == 1) {
+        if (status == dbManagerStatus.STATUS_LOGGED) {
             Cursor userCursor = dbManagerUser.fetch();
             int type = userCursor.getInt(userCursor.getColumnIndex("type"));
             Log.e("Type", Integer.toString(type));

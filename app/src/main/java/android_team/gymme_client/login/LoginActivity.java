@@ -105,6 +105,12 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /*@Override
+    public void onBackPressed() {
+        Toast.makeText(this, "Effettua il login o registrati", Toast.LENGTH_LONG).show();
+    }*/
+
+
 
     private void login() throws IOException {
 
@@ -206,7 +212,7 @@ public class LoginActivity extends AppCompatActivity {
                     String email = user.get("email").getAsString();
                     String birthdate = user.get("birthDate").getAsString();
 
-                    dbManagerStatus.update(1);
+                    dbManagerStatus.update(dbManagerStatus.STATUS_LOGGED);
                     Log.e("Status", "Status updated to logged");
 
                     dbManagerUser.insert(id, name, lastname, email, birthdate, type);
