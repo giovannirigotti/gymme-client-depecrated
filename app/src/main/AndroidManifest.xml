@@ -63,6 +63,9 @@
             android:name=".customer.CustomerProfileActivity"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
         <activity android:name=".trainer.TrainerHomeActivity" />
+        <activity
+            android:name=".trainer.TrainerProfileActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
     </application>
 
 </manifest>

@@ -38,6 +38,7 @@ import android_team.gymme_client.local_database.local_dbmanager.DBManagerStatus;
 import android_team.gymme_client.local_database.local_dbmanager.DBManagerUser;
 import android_team.gymme_client.signup.SignupActivity;
 import android_team.gymme_client.support.UserInfo;
+import android_team.gymme_client.trainer.TrainerHomeActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -226,14 +227,17 @@ public class LoginActivity extends AppCompatActivity {
                     dbManagerUser.close();
 
                     if (type == 0) {
+                        //Customer
                         Intent i = new Intent(getApplicationContext(), CustomerHomeActivity.class);
                         i.putExtra("user_id", id);
                         startActivity(i);
                         finish();
                     } else if (type == 1) {
-
                         //Trainer
-
+                        Intent i = new Intent(getApplicationContext(), TrainerHomeActivity.class);
+                        i.putExtra("user_id", id);
+                        startActivity(i);
+                        finish();
                     } else if (type == 2) {
 
                         //Nutrizionista
