@@ -32,6 +32,7 @@
     import java.net.URL;
 
     import android_team.gymme_client.R;
+    import android_team.gymme_client.customer.CustomerProfileActivity;
     import android_team.gymme_client.local_database.local_dbmanager.DBManagerUser;
     import android_team.gymme_client.login.LoginActivity;
     import android_team.gymme_client.support.Utili;
@@ -100,7 +101,7 @@
 
 
             //Get User Data & Customer Data from DB
-            //GetDataSetView(user_id);
+            GetDataSetView(user_id);
 
             //Update password menegment
             _btn_trainer_profile_password.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +138,78 @@
 
         }
 
+        private void GetDataSetView(int user_id) {
+            //User Data
+            new TrainerProfileActivity.GetUserDataConnection().execute(String.valueOf(user_id));
+        }
+
+        private class GetUserDataConnection extends AsyncTask<String, String, JsonObject> {
+
+            @Override
+            protected JsonObject doInBackground(String... params) {
+                URL url;
+                HttpURLConnection urlConnection = null;
+                JsonObject user = null;
+
+                try {
+                    url = new URL("http://10.0.2.2:4000/user/get_all_data/" + params[0]);
+                    urlConnection = (HttpURLConnection) url.openConnection();
+                    urlConnection.setRequestMethod("GET");
+                    urlConnection.setConnectTimeout(5000);
+                    urlConnection.connect();
+                    int responseCode = urlConnection.getResponseCode();
+                    urlConnection.disconnect();
+
+                    if (responseCode == HttpURLConnection.HTTP_OK) {
+                        Log.e("Server response", "HTTP_OK");
+                        String responseString = readStream(urlConnection.getInputStream());
+                        //Log.e("Server user", responseString);
+                        user = JsonParser.parseString(responseString).getAsJsonObject();
+                        nome = user.get("name").getAsString();
+                        cognome = user.get("lastname").getAsString();
+                        email = user.get("email").getAsString();
+                        nascita = user.get("birthdate").getAsString();
+                        _tv_trainer_profile_nome.setText(nome);
+                        _tv_trainer_profile_cognome.setText(cognome);
+                        _tv_trainer_profile_email.setText(email);
+                        _tv_trainer_profile_nascita.setText(nascita.split("T")[0]);
+
+                    } else if (responseCode == HttpURLConnection.HTTP_NOT_FOUND) {
+                        Log.e("Server response", "HTTP_NOT_FOUND");
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (urlConnection != null)
+                        urlConnection.disconnect();
+                }
+                return user;
+            }
+
+            private String readStream(InputStream in) throws UnsupportedEncodingException {
+                BufferedReader reader = null;
+                StringBuffer response = new StringBuffer();
+                try {
+                    reader = new BufferedReader(new InputStreamReader(in));
+                    String line = "";
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (reader != null) {
+                        try {
+                            reader.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                return response.toString();
+            }
+        }
 
 
         //LOGOUT
