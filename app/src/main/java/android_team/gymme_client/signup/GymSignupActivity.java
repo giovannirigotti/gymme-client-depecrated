@@ -95,30 +95,29 @@ public class GymSignupActivity extends AppCompatActivity {
     public void onBackPressed() {
     }
 
-
     private void validateFields() {
-        if (_gym_vat_signup_edit_text.getText().toString().isEmpty() || _gym_name_signup_edit_text.getText().toString().isEmpty()
-                || _gym_address_signup_edit_text.getText().toString().isEmpty() || _gym_zip_code_signup_edit_text.getText().toString().isEmpty()) {
+        if (_gym_vat_signup_edit_text.getText().toString().trim().isEmpty() || _gym_name_signup_edit_text.getText().toString().trim().isEmpty()
+                || _gym_address_signup_edit_text.getText().toString().trim().isEmpty() || _gym_zip_code_signup_edit_text.getText().toString().trim().isEmpty()) {
 
-            if (_gym_vat_signup_edit_text.getText().toString().isEmpty()) {
+            if (_gym_vat_signup_edit_text.getText().toString().trim().isEmpty()) {
                 _gym_vat_signup_text_input.setDefaultHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
                 _gym_vat_signup_text_input.setHint("Inserisci la partita IVA!");
                 _gym_vat_signup_text_input.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
             }
 
-            if (_gym_name_signup_edit_text.getText().toString().isEmpty()) {
+            if (_gym_name_signup_edit_text.getText().toString().trim().isEmpty()) {
                 _gym_name_signup_text_input.setDefaultHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
                 _gym_name_signup_text_input.setHint("Inserisci il nome!");
                 _gym_name_signup_text_input.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
             }
 
-            if (_gym_address_signup_edit_text.getText().toString().isEmpty()) {
+            if (_gym_address_signup_edit_text.getText().toString().trim().isEmpty()) {
                 _gym_address_signup_text_input.setDefaultHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
                 _gym_address_signup_text_input.setHint("Inserisci l'indirizzo!");
                 _gym_address_signup_text_input.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
             }
 
-            if (_gym_zip_code_signup_edit_text.getText().toString().isEmpty()) {
+            if (_gym_zip_code_signup_edit_text.getText().toString().trim().isEmpty()) {
                 _zip_code_signup_text_input.setDefaultHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
                 _zip_code_signup_text_input.setHint("Inserisci il CAP!");
                 _zip_code_signup_text_input.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
@@ -143,3 +142,4 @@ public class GymSignupActivity extends AppCompatActivity {
         }
     }
 }
+
