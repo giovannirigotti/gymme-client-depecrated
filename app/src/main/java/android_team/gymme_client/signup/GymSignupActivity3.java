@@ -20,6 +20,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.io.BufferedWriter;
+import java.io.Console;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -154,6 +155,7 @@ public class GymSignupActivity3 extends AppCompatActivity {
 
                 if (checkFormat()) {
                     getHours();
+
                     new RegisterGymDataConnection().execute(Integer.toString(user_id), vat_number, gym_name, gym_address, zip_code,
                             pool, boxRing, aerobics, spa, wifi, parkingArea, personalTrainer, nutritionist, impedanceBalance, courses, showers, Integer.toString(opening_monday),
                             Integer.toString(closing_monday),
@@ -243,8 +245,9 @@ public class GymSignupActivity3 extends AppCompatActivity {
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                     i.putExtra("email", email);
-                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
+
                     urlConnection.disconnect();
                     toastMessage = "Dati registrati correttamente!";
                     finish();
@@ -286,6 +289,7 @@ public class GymSignupActivity3 extends AppCompatActivity {
         } else opening_tuesday = -1;
         if (!tuesday_closing_edit_text.getText().toString().trim().isEmpty()) {
             closing_tuesday = toMins(tuesday_closing_edit_text.getText().toString().trim());
+            opening_tuesday = toMins(tuesday_opening_edit_text.getText().toString().trim());
         } else closing_tuesday = -1;
         if (!wednesday_opening_edit_text.getText().toString().trim().isEmpty()) {
             opening_wednesday = toMins(wednesday_opening_edit_text.getText().toString().trim());
@@ -333,13 +337,28 @@ public class GymSignupActivity3 extends AppCompatActivity {
         hours[12] = opening_sunday;
         hours[13] = closing_sunday;
 
-
     }
 
     private int toMins(String s) {
 
-        int minutes = Integer.parseInt(s.substring(0, 1)) % 60 + Integer.parseInt(s.substring(3, 4));
-        return minutes;
+        int hours=-1;
+        int minutes = 0;
+
+        if (s.substring(1,1).compareTo("0") == 0) {
+            hours= Integer.parseInt(s.substring(1, 2)) * 60;
+        } else {
+            hours=Integer.parseInt(s.substring(0, 2)) * 60;
+        }
+
+        if(s.substring(3,4).compareTo("0") == 0){
+            minutes=  Integer.parseInt(s.substring(4, 5));
+        } else {
+
+            minutes=Integer.parseInt(s.substring(3, 5));
+
+        }
+
+        return hours+minutes;
     }
 
     private boolean checkFormat() {
