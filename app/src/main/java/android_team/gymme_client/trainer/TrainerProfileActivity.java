@@ -107,7 +107,7 @@
             _btn_trainer_profile_password.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   //ChangePassword(TrainerProfileActivity.this, user_id);
+                   ChangePassword(TrainerProfileActivity.this, user_id);
                 }
             });
 
@@ -115,7 +115,7 @@
             _btn_trainer_profile_qualifica.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //ChangeDiseases(TrainerProfileActivity.this, user_id);
+                    ChangeQualification(TrainerProfileActivity.this, user_id);
                 }
             });
 
@@ -450,6 +450,338 @@
                         urlConnection.disconnect();
                     } else {
                         Log.e("EMAIL", "Error");
+                        responseCode = 500;
+                        delegate.processFinish(responseCode);
+                        urlConnection.disconnect();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    responseCode = 69;
+                    delegate.processFinish(responseCode);
+                } finally {
+                    if (urlConnection != null)
+                        urlConnection.disconnect();
+                }
+                return responseCode;
+            }
+        }
+
+        //PASSWORD
+        private void ChangePassword(Activity a, int user_id) {
+            TrainerProfileActivity.CustomDialogPasswordClass cdd = new TrainerProfileActivity.CustomDialogPasswordClass(a, user_id);
+            cdd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            cdd.show();
+        }
+
+        private class CustomDialogPasswordClass extends Dialog implements android.view.View.OnClickListener {
+
+            public Activity c;
+            public Button Aggiorna, Esci;
+            public EditText old_password, new_password, confirm_password;
+            public Integer user_id;
+
+            public CustomDialogPasswordClass(Activity a, Integer user_id) {
+                super(a);
+                this.c = a;
+                this.user_id = user_id;
+            }
+
+            @Override
+            protected void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+                requestWindowFeature(Window.FEATURE_NO_TITLE);
+                setContentView(R.layout.dialog_update_password);
+                Aggiorna = (Button) findViewById(R.id.dialog_confirm_user_type_yes);
+                Esci = (Button) findViewById(R.id.dialog_confirm_user_type_no);
+                old_password = (EditText) findViewById(R.id.et_old_password);
+                new_password = (EditText) findViewById(R.id.ed_new_password);
+                confirm_password = (EditText) findViewById(R.id.et_confirm_password);
+
+                Aggiorna.setOnClickListener(this);
+                Esci.setOnClickListener(this);
+            }
+
+
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.dialog_confirm_user_type_yes:
+                        if (checkInputs()) {
+                            TrainerProfileActivity.UpdatePasswordConnection asyncTask = (TrainerProfileActivity.UpdatePasswordConnection) new TrainerProfileActivity.UpdatePasswordConnection(new TrainerProfileActivity.UpdatePasswordConnection.AsyncResponse() {
+
+                                @Override
+                                public void processFinish(Integer output) {
+                                    if (output == 403) {
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                Toast.makeText(TrainerProfileActivity.this, "Vecchia password non corrisponde", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    } else if (output == 200) {
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                Toast.makeText(TrainerProfileActivity.this, "SUCCESS, password aggiornata", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                        dismiss();
+                                    } else {
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                Toast.makeText(TrainerProfileActivity.this, "ERRORE, server side", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                }
+
+                            }).execute(String.valueOf(user_id), old_password.getText().toString(), new_password.getText().toString());
+
+                        } else {
+                            Toast.makeText(getContext(), "Errore: \nCampi vuoti\nPassword non coincidono\nPassword nuova non abbstanza camplicata", Toast.LENGTH_LONG).show();
+                        }
+
+                        //
+
+                        break;
+                    case R.id.dialog_confirm_user_type_no:
+                        //
+                        dismiss();
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            private boolean checkInputs() {
+                boolean res = false;
+                String o_p, n_p, c_p;
+                o_p = old_password.getText().toString();
+                n_p = new_password.getText().toString();
+                c_p = confirm_password.getText().toString();
+                if (o_p.isEmpty() || n_p.isEmpty() || c_p.isEmpty()) {
+                    res = false;
+                    Log.e("PASSWORD", "Campi vuoti");
+                } else {
+                    if (!validatePassword(n_p)) {
+                        res = false;
+                        Log.e("PASSWORD", "Password non valida.");
+                    } else {
+                        if (!n_p.equals(c_p)) {
+                            res = false;
+                            Log.e("PASSWORD", "Password non uguali");
+                        } else {
+                            res = true;
+                            Log.e("PASSWORD", "Tutto OK");
+                        }
+                    }
+                }
+                return res;
+            }
+
+            private boolean validatePassword(String password) {
+                String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
+                return password.matches(regex);
+            }
+        }
+
+        public static class UpdatePasswordConnection extends AsyncTask<String, String, Integer> {
+
+            // you may separate this or combined to caller class.
+            public interface AsyncResponse {
+                void processFinish(Integer output);
+            }
+
+            public TrainerProfileActivity.UpdatePasswordConnection.AsyncResponse delegate = null;
+
+            public UpdatePasswordConnection(TrainerProfileActivity.UpdatePasswordConnection.AsyncResponse delegate) {
+                this.delegate = delegate;
+            }
+
+            @Override
+            protected Integer doInBackground(String... params) {
+                URL url;
+                HttpURLConnection urlConnection = null;
+                JsonObject user = null;
+                int responseCode = 500;
+                try {
+                    url = new URL("http://10.0.2.2:4000/user/update_password");
+                    urlConnection = (HttpURLConnection) url.openConnection();
+                    urlConnection.setRequestMethod("POST");
+                    urlConnection.setConnectTimeout(5000);
+                    urlConnection.setRequestProperty("Content-Type", "application/json");
+
+                    JsonObject paramsJson = new JsonObject();
+
+                    paramsJson.addProperty("user_id", params[0]);
+                    paramsJson.addProperty("old_password", params[1]);
+                    paramsJson.addProperty("new_password", params[2]);
+
+                    urlConnection.setDoOutput(true);
+
+                    OutputStream os = urlConnection.getOutputStream();
+                    BufferedWriter writer = new BufferedWriter(
+                            new OutputStreamWriter(os, "UTF-8"));
+                    writer.write(paramsJson.toString());
+                    writer.flush();
+                    writer.close();
+                    os.close();
+
+                    urlConnection.connect();
+                    responseCode = urlConnection.getResponseCode();
+
+                    if (responseCode == HttpURLConnection.HTTP_OK) {
+                        Log.e("PASSWORD", "CAMBIATA SUL DB");
+                        responseCode = 200;
+                        delegate.processFinish(responseCode);
+                    } else if (responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
+                        Log.e("PASSWORD", "Error 500!");
+                        responseCode = 500;
+                        delegate.processFinish(responseCode);
+                        urlConnection.disconnect();
+                    } else if (responseCode == HttpURLConnection.HTTP_FORBIDDEN) {
+                        Log.e("PASSWORD", "Error 403!");
+                        responseCode = 403;
+                        delegate.processFinish(responseCode);
+                        urlConnection.disconnect();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    responseCode = 69;
+                    delegate.processFinish(responseCode);
+                } finally {
+                    if (urlConnection != null)
+                        urlConnection.disconnect();
+                }
+                return responseCode;
+            }
+        }
+
+        //QUALIFICATION
+        //ALLERGIE
+        private void ChangeQualification(Activity a, int user_id) {
+            TrainerProfileActivity.CustomDialogQualificationClass cdd = new TrainerProfileActivity.CustomDialogQualificationClass(a, user_id);
+            cdd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            cdd.show();
+        }
+
+        private class CustomDialogQualificationClass extends Dialog implements android.view.View.OnClickListener {
+
+            public Activity c;
+            public Button Aggiorna, Esci;
+            public EditText qualifications;
+            public Integer user_id;
+
+            public CustomDialogQualificationClass(Activity a, Integer user_id) {
+                super(a);
+                this.c = a;
+                this.user_id = user_id;
+            }
+
+            @Override
+            protected void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+                requestWindowFeature(Window.FEATURE_NO_TITLE);
+                setContentView(R.layout.dialog_update_qualification);
+                Aggiorna = (Button) findViewById(R.id.dialog_confirm_user_type_yes);
+                Esci = (Button) findViewById(R.id.dialog_confirm_user_type_no);
+                qualifications = (EditText) findViewById(R.id.et_dialog_qualification);
+                qualifications.setText(_tv_trainer_profile_qualifica.getText().toString());
+
+                Aggiorna.setOnClickListener(this);
+                Esci.setOnClickListener(this);
+            }
+
+
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.dialog_confirm_user_type_yes:
+                        TrainerProfileActivity.UpdateQualificationConnection asyncTask = (TrainerProfileActivity.UpdateQualificationConnection) new TrainerProfileActivity.UpdateQualificationConnection(new TrainerProfileActivity.UpdateQualificationConnection.AsyncResponse() {
+
+                            @Override
+                            public void processFinish(Integer output) {
+                                if (output == 200) {
+                                    runOnUiThread(new Runnable() {
+                                        public void run() {
+                                            Toast.makeText(TrainerProfileActivity.this, "SUCCESS, allergie aggiornate", Toast.LENGTH_SHORT).show();
+                                            _tv_trainer_profile_qualifica.setText(qualifications.getText().toString());
+                                        }
+                                    });
+                                    dismiss();
+                                } else {
+                                    runOnUiThread(new Runnable() {
+                                        public void run() {
+                                            Toast.makeText(TrainerProfileActivity.this, "ERRORE, server side", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            }
+
+                        }).execute(String.valueOf(user_id), qualifications.getText().toString());
+
+
+                        //
+
+                        break;
+                    case R.id.dialog_confirm_user_type_no:
+                        //
+                        dismiss();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        public static class UpdateQualificationConnection extends AsyncTask<String, String, Integer> {
+
+            // you may separate this or combined to caller class.
+            public interface AsyncResponse {
+                void processFinish(Integer output);
+            }
+
+            public TrainerProfileActivity.UpdateQualificationConnection.AsyncResponse delegate = null;
+
+            public UpdateQualificationConnection(TrainerProfileActivity.UpdateQualificationConnection.AsyncResponse delegate) {
+                this.delegate = delegate;
+            }
+
+            @Override
+            protected Integer doInBackground(String... params) {
+                URL url;
+                HttpURLConnection urlConnection = null;
+                JsonObject user = null;
+                int responseCode = 500;
+                try {
+                    url = new URL("http://10.0.2.2:4000/trainer/update_qualification");
+                    urlConnection = (HttpURLConnection) url.openConnection();
+                    urlConnection.setRequestMethod("POST");
+                    urlConnection.setConnectTimeout(5000);
+                    urlConnection.setRequestProperty("Content-Type", "application/json");
+
+                    JsonObject paramsJson = new JsonObject();
+
+                    paramsJson.addProperty("user_id", params[0]);
+                    paramsJson.addProperty("qualification", params[1]);
+
+                    urlConnection.setDoOutput(true);
+
+                    OutputStream os = urlConnection.getOutputStream();
+                    BufferedWriter writer = new BufferedWriter(
+                            new OutputStreamWriter(os, "UTF-8"));
+                    writer.write(paramsJson.toString());
+                    writer.flush();
+                    writer.close();
+                    os.close();
+
+                    urlConnection.connect();
+                    responseCode = urlConnection.getResponseCode();
+
+                    if (responseCode == HttpURLConnection.HTTP_OK) {
+                        Log.e("QUALIFICHE", "CAMBIATE SUL DB");
+                        responseCode = 200;
+                        delegate.processFinish(responseCode);
+                    } else {
+                        Log.e("QUALIFICHE", "Error");
                         responseCode = 500;
                         delegate.processFinish(responseCode);
                         urlConnection.disconnect();

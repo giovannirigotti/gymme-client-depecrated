@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -33,10 +32,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import android_team.gymme_client.R;
-import android_team.gymme_client.local_database.local_dbmanager.DBManagerStatus;
 import android_team.gymme_client.local_database.local_dbmanager.DBManagerUser;
 import android_team.gymme_client.login.LoginActivity;
-import android_team.gymme_client.signup.SignupActivity;
 import android_team.gymme_client.support.Utili;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -665,7 +662,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
             setContentView(R.layout.dialog_update_allergies);
             Aggiorna = (Button) findViewById(R.id.dialog_confirm_user_type_yes);
             Esci = (Button) findViewById(R.id.dialog_confirm_user_type_no);
-            allergies = (EditText) findViewById(R.id.et_dialog_allergies);
+            allergies = (EditText) findViewById(R.id.et_dialog_qualification);
             allergies.setText(_tv_customer_profile_allergie.getText().toString());
 
             Aggiorna.setOnClickListener(this);

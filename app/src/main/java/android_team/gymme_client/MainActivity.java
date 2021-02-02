@@ -16,6 +16,7 @@ import android_team.gymme_client.local_database.local_dbmanager.DBManagerUser;
 import android_team.gymme_client.login.LoginActivity;
 import android_team.gymme_client.support.NoNetworkActivity;
 import android_team.gymme_client.support.UserInfo;
+import android_team.gymme_client.trainer.TrainerProfileActivity;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -50,12 +51,18 @@ public class MainActivity extends AppCompatActivity {
             Log.e("Type", Integer.toString(type));
             dbManagerUser.close();
             dbManagerStatus.close();
-            if (type == 0) { //Se è un utente "normale".
+            if (type == 0) {
+                //Se è un utente "normale".
                 Intent i = new Intent(getApplicationContext(), CustomerHomeActivity.class);
+                //i.putExtra("user_id",user_id); DA ERRORI PERCHE user vuoto suppongo
                 startActivity(i);
                 finish();
             } else if (type == 1) {
                 //Se è un trainer.
+                Intent i = new Intent(getApplicationContext(), TrainerProfileActivity.class);
+                //i.putExtra("user_id",user_id); DA ERRORI PERCHE user vuoto suppongo
+                startActivity(i);
+                finish();
             } else if (type == 2) {
                 //Se è un nutrizionista.
             } else if (type == 3) {

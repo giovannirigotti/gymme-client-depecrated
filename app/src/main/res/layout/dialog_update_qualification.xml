@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
 
         android:layout_gravity="center_vertical"
-        android:text="Modifica le allergie e premi aggiorna altrimenti premi esci."
+        android:text="Modifica le qualifiche e premi aggiorna altrimenti premi esci."
         android:textAlignment="viewStart"
         android:textSize="20sp" />
 
@@ -20,7 +20,7 @@
         android:id="@+id/dialog_confirm_user_type_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Aggiorna allergie"
+        android:text="Aggiorna qualifiche"
         android:textAlignment="center"
         android:textSize="20sp"
         android:textStyle="bold" />
