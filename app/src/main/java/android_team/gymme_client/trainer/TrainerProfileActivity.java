@@ -123,7 +123,7 @@
             _btn_trainer_profile_mail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //ChangeAllergies(TrainerProfileActivity.this, user_id);
+                    ChangeEmail(TrainerProfileActivity.this, user_id);
                 }
             });
 
@@ -138,6 +138,7 @@
 
         }
 
+        //USER DATA
         private void GetDataSetView(int user_id) {
             //User Data
             new TrainerProfileActivity.GetUserDataConnection().execute(String.valueOf(user_id));
@@ -276,6 +277,195 @@
             }
 
         }
+
+        //EMAIL
+        private void ChangeEmail(Activity a, int user_id) {
+            TrainerProfileActivity.CustomDialogEmailClass cdd = new TrainerProfileActivity.CustomDialogEmailClass(a, user_id);
+            cdd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            cdd.show();
+        }
+
+        private class CustomDialogEmailClass extends Dialog implements android.view.View.OnClickListener {
+
+            public Activity c;
+            public Button Aggiorna, Esci;
+            public EditText new_email, confirm_email;
+            public Integer user_id;
+
+            public CustomDialogEmailClass(Activity a, Integer user_id) {
+                super(a);
+                this.c = a;
+                this.user_id = user_id;
+            }
+
+            @Override
+            protected void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+                requestWindowFeature(Window.FEATURE_NO_TITLE);
+                setContentView(R.layout.dialog_update_email);
+                Aggiorna = (Button) findViewById(R.id.dialog_confirm_user_type_yes);
+                Esci = (Button) findViewById(R.id.dialog_confirm_user_type_no);
+                new_email = (EditText) findViewById(R.id.et_dialog_nuova_email);
+                confirm_email = (EditText) findViewById(R.id.et_dialog_conferma_email);
+
+                Aggiorna.setOnClickListener(this);
+                Esci.setOnClickListener(this);
+            }
+
+
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.dialog_confirm_user_type_yes:
+                        if (checkEmails()) {
+                            TrainerProfileActivity.UpdateEmailConnection asyncTask = (TrainerProfileActivity.UpdateEmailConnection) new TrainerProfileActivity.UpdateEmailConnection(new TrainerProfileActivity.UpdateEmailConnection.AsyncResponse() {
+
+                                @Override
+                                public void processFinish(Integer output) {
+                                    if (output == 403) {
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                Toast.makeText(TrainerProfileActivity.this, "Email già usata. FORBIDDEN", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    } else if (output == 200) {
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                Toast.makeText(TrainerProfileActivity.this, "SUCCESS, email aggiornata", Toast.LENGTH_SHORT).show();
+                                                _tv_trainer_profile_email.setText(new_email.getText().toString());
+                                            }
+                                        });
+                                        dismiss();
+                                    } else {
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                Toast.makeText(TrainerProfileActivity.this, "ERRORE, server side", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                }
+
+                            }).execute(String.valueOf(user_id), new_email.getText().toString());
+
+                        } else {
+                            Toast.makeText(getContext(), "Errore: \n- Campi vuoti\n- Email non coincidono\n- Email nuova non valida", Toast.LENGTH_LONG).show();
+                        }
+
+                        //
+
+                        break;
+                    case R.id.dialog_confirm_user_type_no:
+                        //
+                        dismiss();
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            private boolean checkEmails() {
+                boolean res = false;
+                String n_e, c_e;
+                n_e = new_email.getText().toString();
+                c_e = confirm_email.getText().toString();
+                if (n_e.isEmpty() || c_e.isEmpty()) {
+                    res = false;
+                    Log.e("EMAIL", "Campi vuoti");
+                } else {
+                    if (!validateMail(n_e)) {
+                        res = false;
+                        Log.e("EMAIL", "Email non valida.");
+                    } else {
+                        if (!n_e.equals(c_e)) {
+                            res = false;
+                            Log.e("EMAIL", "Email non uguali");
+                        } else {
+                            res = true;
+                            Log.e("Email", "Tutto OK");
+                        }
+                    }
+                }
+                return res;
+            }
+
+            private boolean validateMail(String email) {
+                String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+                return email.matches(regex);
+            }
+
+        }
+
+        public static class UpdateEmailConnection extends AsyncTask<String, String, Integer> {
+
+            // you may separate this or combined to caller class.
+            public interface AsyncResponse {
+                void processFinish(Integer output);
+            }
+
+            public TrainerProfileActivity.UpdateEmailConnection.AsyncResponse delegate = null;
+
+            public UpdateEmailConnection(TrainerProfileActivity.UpdateEmailConnection.AsyncResponse delegate) {
+                this.delegate = delegate;
+            }
+
+            @Override
+            protected Integer doInBackground(String... params) {
+                URL url;
+                HttpURLConnection urlConnection = null;
+                JsonObject user = null;
+                int responseCode = 500;
+                try {
+                    url = new URL("http://10.0.2.2:4000/user/update_email");
+                    urlConnection = (HttpURLConnection) url.openConnection();
+                    urlConnection.setRequestMethod("POST");
+                    urlConnection.setConnectTimeout(5000);
+                    urlConnection.setRequestProperty("Content-Type", "application/json");
+
+                    JsonObject paramsJson = new JsonObject();
+
+                    paramsJson.addProperty("user_id", params[0]);
+                    paramsJson.addProperty("email", params[1]);
+
+                    urlConnection.setDoOutput(true);
+
+                    OutputStream os = urlConnection.getOutputStream();
+                    BufferedWriter writer = new BufferedWriter(
+                            new OutputStreamWriter(os, "UTF-8"));
+                    writer.write(paramsJson.toString());
+                    writer.flush();
+                    writer.close();
+                    os.close();
+
+                    urlConnection.connect();
+                    responseCode = urlConnection.getResponseCode();
+
+                    if (responseCode == HttpURLConnection.HTTP_OK) {
+                        Log.e("EMAIL", "CAMBIATA SUL DB");
+                        responseCode = 200;
+                        delegate.processFinish(responseCode);
+                    } else if (responseCode == HttpURLConnection.HTTP_FORBIDDEN) {
+                        Log.e("EMAIL", "Error 403!");
+                        responseCode = 403;
+                        delegate.processFinish(responseCode);
+                        urlConnection.disconnect();
+                    } else {
+                        Log.e("EMAIL", "Error");
+                        responseCode = 500;
+                        delegate.processFinish(responseCode);
+                        urlConnection.disconnect();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    responseCode = 69;
+                    delegate.processFinish(responseCode);
+                } finally {
+                    if (urlConnection != null)
+                        urlConnection.disconnect();
+                }
+                return responseCode;
+            }
+        }
+
 
         //LOGOUT
         private void DoLogout() {
