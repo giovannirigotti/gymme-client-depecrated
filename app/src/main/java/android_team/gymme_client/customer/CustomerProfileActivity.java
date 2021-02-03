@@ -35,6 +35,7 @@ import android_team.gymme_client.R;
 import android_team.gymme_client.local_database.local_dbmanager.DBManagerUser;
 import android_team.gymme_client.login.LoginActivity;
 import android_team.gymme_client.support.Utili;
+import android_team.gymme_client.trainer.TrainerProfileActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -162,12 +163,82 @@ public class CustomerProfileActivity extends AppCompatActivity {
     //GET DATA CLASSES
     private void GetDataSetView(int user_id) {
         //User Data
-        new CustomerProfileActivity.GetUserDataConnection().execute(String.valueOf(user_id));
+        CustomerProfileActivity.GetUserDataConnection asyncTaskUser = (CustomerProfileActivity.GetUserDataConnection) new CustomerProfileActivity.GetUserDataConnection(new CustomerProfileActivity.GetUserDataConnection.AsyncResponse() {
+            @Override
+            public void processFinish(String _name, String _cognome, String _email, String _nascita) {
+
+                if (_name.equals("error")) {
+                    Toast.makeText(CustomerProfileActivity.this, "ERRORE CARICAMENTO DATI", Toast.LENGTH_SHORT).show();
+                    Intent new_i = new Intent(CustomerProfileActivity.this, LoginActivity.class);
+                    startActivity(new_i);
+                    finish();
+                } else if (!_name.equals("error")) {
+                    nome = _name;
+                    cognome = _cognome;
+                    email = _email;
+                    nascita = _nascita;
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(CustomerProfileActivity.this, "Ben tornato", Toast.LENGTH_SHORT).show();
+                            _tv_customer_profile_nome.setText(nome);
+                            _tv_customer_profile_cognome.setText(cognome);
+                            _tv_customer_profile_email.setText(email);
+                            _tv_customer_profile_nascita.setText(nascita.split("T")[0]);
+                        }
+                    });
+                } else {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(CustomerProfileActivity.this, "ERRORE, server side", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+
+        }).execute(String.valueOf(user_id));
         //Customer Data
-        new CustomerProfileActivity.GetCustomerDataConnection().execute(String.valueOf(user_id));
+        CustomerProfileActivity.GetCustomerDataConnection asyncTaskTrainer = (CustomerProfileActivity.GetCustomerDataConnection) new GetCustomerDataConnection(new GetCustomerDataConnection.AsyncResponse() {
+            @Override
+            public void processFinish(String _altezza, String _disturbi, String _allergie) {
+
+                if (_altezza.equals("error")) {
+                    Toast.makeText(CustomerProfileActivity.this, "ERRORE CARICAMENTO DATI", Toast.LENGTH_SHORT).show();
+                    Intent new_i = new Intent(CustomerProfileActivity.this, LoginActivity.class);
+                    startActivity(new_i);
+                    finish();
+                } else if (!_altezza.equals("error")) {
+                    altezza = Integer.valueOf(_altezza);
+                    disturbi = _disturbi;
+                    allergie = _allergie;
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            _tv_customer_profile_altezza.setText(String.valueOf(altezza) + "cm");
+                            _tv_customer_profile_disturbi.setText(disturbi);
+                            _tv_customer_profile_allergie.setText(allergie);
+                        }
+                    });
+                } else {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(CustomerProfileActivity.this, "ERRORE, server side", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        }).execute(String.valueOf(user_id));
     }
 
-    private class GetUserDataConnection extends AsyncTask<String, String, JsonObject> {
+    private static class GetUserDataConnection extends AsyncTask<String, String, JsonObject> {
+
+        public interface AsyncResponse {
+            void processFinish(String _name, String _cognome, String _email, String _nascita);
+        }
+
+        public CustomerProfileActivity.GetUserDataConnection.AsyncResponse delegate = null;
+
+        public GetUserDataConnection(CustomerProfileActivity.GetUserDataConnection.AsyncResponse delegate) {
+            this.delegate = delegate;
+        }
 
         @Override
         protected JsonObject doInBackground(String... params) {
@@ -189,17 +260,11 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     String responseString = readStream(urlConnection.getInputStream());
                     //Log.e("Server user", responseString);
                     user = JsonParser.parseString(responseString).getAsJsonObject();
-                    nome = user.get("name").getAsString();
-                    cognome = user.get("lastname").getAsString();
-                    email = user.get("email").getAsString();
-                    nascita = user.get("birthdate").getAsString();
-                    _tv_customer_profile_nome.setText(nome);
-                    _tv_customer_profile_cognome.setText(cognome);
-                    _tv_customer_profile_email.setText(email);
-                    _tv_customer_profile_nascita.setText(nascita.split("T")[0]);
+                    delegate.processFinish(user.get("name").getAsString(), user.get("lastname").getAsString(), user.get("email").getAsString(), user.get("birthdate").getAsString());
 
                 } else if (responseCode == HttpURLConnection.HTTP_NOT_FOUND) {
                     Log.e("Server response", "HTTP_NOT_FOUND");
+                    delegate.processFinish("error", "error", "error", "error");
                 }
 
             } catch (IOException e) {
@@ -237,7 +302,16 @@ public class CustomerProfileActivity extends AppCompatActivity {
 
     }
 
-    private class GetCustomerDataConnection extends AsyncTask<String, String, JsonObject> {
+    private static class GetCustomerDataConnection extends AsyncTask<String, String, JsonObject> {
+        public interface AsyncResponse {
+            void processFinish(String _altezza, String _disturbi, String _allergie);
+        }
+
+        public CustomerProfileActivity.GetCustomerDataConnection.AsyncResponse delegate = null;
+
+        public GetCustomerDataConnection(CustomerProfileActivity.GetCustomerDataConnection.AsyncResponse delegate) {
+            this.delegate = delegate;
+        }
 
         @Override
         protected JsonObject doInBackground(String... params) {
@@ -259,15 +333,11 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     String responseString = readStream(urlConnection.getInputStream());
                     Log.e("Server customer", responseString);
                     user = JsonParser.parseString(responseString).getAsJsonObject();
-                    altezza = user.get("height").getAsInt();
-                    disturbi = user.get("diseases").getAsString();
-                    allergie = user.get("allergies").getAsString();
-                    _tv_customer_profile_altezza.setText(String.valueOf(altezza) + "cm");
-                    _tv_customer_profile_allergie.setText(allergie);
-                    _tv_customer_profile_disturbi.setText(disturbi);
+                    delegate.processFinish(user.get("height").getAsString(), user.get("diseases").getAsString(), user.get("allergies").getAsString());
 
                 } else if (responseCode == HttpURLConnection.HTTP_NOT_FOUND) {
                     Log.e("Server response", "HTTP_NOT_FOUND");
+                    delegate.processFinish("error","error", "error");
                 }
 
             } catch (IOException e) {

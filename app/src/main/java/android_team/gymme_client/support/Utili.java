@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import android_team.gymme_client.local_database.local_dbmanager.DBManagerStatus;
+import android_team.gymme_client.local_database.local_dbmanager.DBManagerUser;
 import android_team.gymme_client.login.LoginActivity;
 
 public class Utili{
@@ -15,6 +16,10 @@ public class Utili{
         DBManagerStatus DBstatus = new DBManagerStatus(c);
         DBstatus.open();
         DBstatus.update(DBstatus.STATUS_NOT_LOGGED);
+
+        DBManagerUser DBuser = new DBManagerUser(c);
+        DBuser.open();
+        DBuser.delete();
 
     }
 }

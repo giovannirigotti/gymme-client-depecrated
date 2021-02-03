@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         if(getIntent().hasExtra("email")){
-            Log.e("eail", getIntent().getStringExtra("email"));
+            Log.e("email", getIntent().getStringExtra("email"));
             _emailText.setText(getIntent().getStringExtra("email"));
         }
 

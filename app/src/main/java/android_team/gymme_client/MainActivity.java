@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
             Cursor userCursor = dbManagerUser.fetch();
             int type = userCursor.getInt(userCursor.getColumnIndex("type"));
             int user_id = userCursor.getInt(userCursor.getColumnIndex("id"));
+            Log.e("USER ID", String.valueOf(user_id));
 
             UserInfo.setUser_id(user_id);
             UserInfo.setUser_type(type);
@@ -54,13 +55,13 @@ public class MainActivity extends AppCompatActivity {
             if (type == 0) {
                 //Se è un utente "normale".
                 Intent i = new Intent(getApplicationContext(), CustomerHomeActivity.class);
-                //i.putExtra("user_id",user_id); DA ERRORI PERCHE user vuoto suppongo
+                i.putExtra("user_id",user_id);
                 startActivity(i);
                 finish();
             } else if (type == 1) {
                 //Se è un trainer.
                 Intent i = new Intent(getApplicationContext(), TrainerProfileActivity.class);
-                //i.putExtra("user_id",user_id); DA ERRORI PERCHE user vuoto suppongo
+                i.putExtra("user_id",user_id); //DA ERRORI PERCHE user vuoto suppongo
                 startActivity(i);
                 finish();
             } else if (type == 2) {
